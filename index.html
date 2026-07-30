@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nabil Rozikin Maulana | NBRZM.SYS</title>
+<title>Nabil Rozikin Maulana | NBRZM.KINN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
@@ -17,9 +17,19 @@
 </head>
 <body>
 
+<div class="noise-overlay"></div>
+
+<div class="preloader" id="preloader">
+  <div class="preloader-text">NBRZM<span>.</span>KINN</div>
+  <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
+  <div class="preloader-log" id="preloaderLog"></div>
+</div>
+
 <div class="progress-bar" id="progressBar"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="cursor-dot" id="cursorDot"></div>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
 
 <div class="ticker-wrap">
   <div class="ticker">
@@ -37,11 +47,12 @@
 </div>
 
 <nav>
-  <div class="logo">NBRZM<span>.</span>SYS</div>
+  <div class="logo">NBRZM<span>.</span>KINN</div>
   <div class="navlinks">
     <a href="#about">About</a>
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
+    <a href="#testimonials">Testimonials</a>
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-right">
@@ -58,6 +69,7 @@
   <a href="#about" style="padding:14px 24px;border-top:2px solid var(--ink);">About</a>
   <a href="#skills" style="padding:14px 24px;border-top:2px solid var(--ink);">Skills</a>
   <a href="#projects" style="padding:14px 24px;border-top:2px solid var(--ink);">Projects</a>
+  <a href="#testimonials" style="padding:14px 24px;border-top:2px solid var(--ink);">Testimonials</a>
   <a href="#contact" style="padding:14px 24px;border-top:2px solid var(--ink);">Contact</a>
 </div>
 
@@ -69,7 +81,7 @@
   <div data-reveal>
     <div class="eyebrow">TKJ STUDENT / NETWORK &amp; IoT</div>
     <h1>I build <span class="hl">networks</span>, robots &amp; the web.</h1>
-    <p class="lead">Nabil Rozikin Maulana — siswa Teknik Komputer dan Jaringan yang bikin website, ngoprek Mikrotik, dan merakit robot ESP32. Belajar sambil bikin project yang beneran jalan.</p>
+    <p class="lead" id="typedLead"></p>
     <div class="btn-row">
       <a href="#projects" class="btn primary magnetic">Lihat Project ↓</a>
       <a href="#contact" class="btn alt magnetic">Hubungi Saya</a>
@@ -77,7 +89,7 @@
   </div>
   <div class="hero-photo" data-reveal>
     <img src="assets/nabil/profile.jpg" alt="Nabil Rozikin Maulana">
-    <div class="tag">STATUS: ONLINE</div>
+    <div class="tag"><span class="blink-dot"></span>STATUS: ONLINE</div>
   </div>
 </div>
 
@@ -107,11 +119,11 @@
   <div class="eyebrow">02 — SKILLS</div>
   <h2 style="font-size:2rem;margin-bottom:28px;">Tech Arsenal</h2>
   <div data-reveal>
-    <div class="skill-row"><div class="label"><span>HTML</span><span>90%</span></div><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div></div>
-    <div class="skill-row"><div class="label"><span>CSS</span><span>85%</span></div><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div></div>
-    <div class="skill-row"><div class="label"><span>JavaScript</span><span>75%</span></div><div class="bar-track"><div class="bar-fill" style="width:75%"></div></div></div>
-    <div class="skill-row"><div class="label"><span>Networking</span><span>90%</span></div><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div></div>
-    <div class="skill-row"><div class="label"><span>Arduino / ESP32</span><span>85%</span></div><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div></div>
+    <div class="skill-row"><div class="label"><span>HTML</span><span>90%</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
+    <div class="skill-row"><div class="label"><span>CSS</span><span>85%</span></div><div class="bar-track"><div class="bar-fill" data-width="85"></div></div></div>
+    <div class="skill-row"><div class="label"><span>JavaScript</span><span>75%</span></div><div class="bar-track"><div class="bar-fill" data-width="75"></div></div></div>
+    <div class="skill-row"><div class="label"><span>Networking</span><span>90%</span></div><div class="bar-track"><div class="bar-fill" data-width="90"></div></div></div>
+    <div class="skill-row"><div class="label"><span>Arduino / ESP32</span><span>85%</span></div><div class="bar-track"><div class="bar-fill" data-width="85"></div></div></div>
   </div>
 </section>
 
@@ -123,22 +135,63 @@
       <div class="proj-top"><div class="num">PRJ / 01</div><h3>💻 Personal Portfolio</h3></div>
       <div class="proj-body">
         <p>Website portfolio modern menggunakan HTML, CSS, dan JavaScript.</p>
-        <a class="proj-link" href="/Portfolio/assets/project/portfolio.html">View Project →</a>
+        <a class="proj-link" href="/nabil-vercell/assets/project/portfolio.html" target="_blank" rel="noopener noreferrer">View Project ↗</a>
       </div>
     </div>
     <div class="proj-card" data-reveal>
       <div class="proj-top"><div class="num">PRJ / 02</div><h3>🤖 Robot Pathfinder</h3></div>
       <div class="proj-body">
         <p>Robot Line Follower berbasis ESP32 menggunakan sensor infrared.</p>
-        <a class="proj-link" href="/project/pathfinder.html">View Project →</a>
+        <a class="proj-link" href="/project/pathfinder.html" target="_blank" rel="noopener noreferrer">View Project ↗</a>
       </div>
     </div>
     <div class="proj-card" data-reveal>
       <div class="proj-top"><div class="num">PRJ / 03</div><h3>📡 IoT Monitoring</h3></div>
       <div class="proj-body">
         <p>Sistem monitoring berbasis ESP32 yang dapat dipantau melalui internet.</p>
-        <a class="proj-link" href="/project/iot.html">View Project →</a>
+        <a class="proj-link" href="/project/iot.html" target="_blank" rel="noopener noreferrer">View Project ↗</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="eyebrow">04 — TESTIMONIALS</div>
+  <h2 style="font-size:2rem;margin-bottom:28px;">What People Say</h2>
+  <div class="testi-grid">
+    <div class="testi-card" data-reveal>
+      <p>Nabil memiliki semangat belajar yang tinggi, cepat memahami materi, dan selalu berusaha menyelesaikan project dengan baik.</p>
+      <div class="testi-name">👨‍🏫 Guru TKJ</div>
+    </div>
+    <div class="testi-card" data-reveal>
+      <p>Mudah diajak bekerja sama dan selalu memberikan solusi ketika mengerjakan project bersama.</p>
+      <div class="testi-name">👨‍💻 Teman Tim</div>
+    </div>
+    <div class="testi-card" data-reveal>
+      <p>Memiliki minat besar di bidang Networking, Web Development, serta IoT.</p>
+      <div class="testi-name">🏆 Mentor</div>
+    </div>
+  </div>
+</section>
+
+<section id="certificates">
+  <div class="eyebrow">05 — CERTIFICATES</div>
+  <h2 style="font-size:2rem;margin-bottom:28px;">Certificates</h2>
+  <div class="cert-grid">
+    <div class="cert-card" data-reveal>
+      <div class="cert-badge">SOON</div>
+      <h3>🏆 Cisco Networking Academy</h3>
+      <p>Introduction to Networking</p>
+    </div>
+    <div class="cert-card" data-reveal>
+      <div class="cert-badge">SOON</div>
+      <h3>💻 Dicoding</h3>
+      <p>Belajar Dasar Web Development</p>
+    </div>
+    <div class="cert-card" data-reveal>
+      <div class="cert-badge">SOON</div>
+      <h3>🤖 Arduino &amp; ESP32</h3>
+      <p>IoT and Embedded System</p>
     </div>
   </div>
 </section>
@@ -148,9 +201,9 @@
     <h2 style="font-size:2rem;">Let's Connect</h2>
     <p>Saya terbuka untuk diskusi, kolaborasi, maupun peluang kerja sama. Jangan ragu untuk menghubungi saya.</p>
     <div class="contact-links">
-      <a href="https://instagram.com/nblrzknm._">📷 Instagram</a>
-      <a href="https://wa.me/6288210670848">💬 WhatsApp</a>
-      <a href="https://t.me/apalaabing">✈️ Telegram</a>
+      <a href="https://instagram.com/nblrzknm._" target="_blank" rel="noopener noreferrer">📷 Instagram</a>
+      <a href="https://wa.me/6288210670848" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
+      <a href="https://t.me/apalaabing" target="_blank" rel="noopener noreferrer">✈️ Telegram</a>
     </div>
   </div>
 </section>

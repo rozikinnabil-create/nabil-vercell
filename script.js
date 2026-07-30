@@ -1,5 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Preloader boot sequence ----
+  const preloader = document.getElementById('preloader');
+  const preloaderFill = document.getElementById('preloaderFill');
+  const preloaderLog = document.getElementById('preloaderLog');
+  const bootLines = [
+    '$ booting NBRZM.SYS...',
+    '$ loading network modules... OK',
+    '$ initializing ESP32 driver... OK',
+    '$ mounting portfolio... OK',
+    '$ welcome, guest.'
+  ];
+
+  if (preloader) {
+    if (reduceMotion) {
+      preloader.classList.add('hide');
+    } else {
+      document.body.style.overflow = 'hidden';
+      let i = 0;
+      const typeNextLine = () => {
+        if (i < bootLines.length) {
+          const line = document.createElement('div');
+          line.textContent = bootLines[i];
+          preloaderLog.appendChild(line);
+          if (preloaderFill) preloaderFill.style.width = ((i + 1) / bootLines.length * 100) + '%';
+          i++;
+          setTimeout(typeNextLine, 280);
+        } else {
+          setTimeout(() => {
+            preloader.classList.add('hide');
+            document.body.style.overflow = '';
+          }, 350);
+        }
+      };
+      setTimeout(typeNextLine, 300);
+    }
+  }
+
   // ---- Theme toggle ----
   const themeToggle = document.getElementById('themeToggle');
   if (themeToggle) {
@@ -16,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mnav = document.getElementById('mnav');
   if (burger && mnav) {
     burger.addEventListener('click', () => mnav.classList.toggle('open'));
+    mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mnav.classList.remove('open')));
   }
 
   // ---- Scroll reveal with stagger ----
@@ -38,6 +78,37 @@ document.addEventListener('DOMContentLoaded', () => {
     if (progressBar) progressBar.style.width = scrolled + '%';
   });
 
+  // ---- Scroll-to-top button ----
+  const scrollTopBtn = document.getElementById('scrollTop');
+  if (scrollTopBtn) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 480) scrollTopBtn.classList.add('show');
+      else scrollTopBtn.classList.remove('show');
+    });
+    scrollTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    });
+  }
+
+  // ---- Typewriter effect on hero lead paragraph ----
+  const typedLead = document.getElementById('typedLead');
+  const leadText = "Nabil Rozikin Maulana — siswa Teknik Komputer dan Jaringan yang bikin website, ngoprek Mikrotik, dan merakit robot ESP32. Belajar sambil bikin project yang beneran jalan.";
+  if (typedLead) {
+    if (reduceMotion) {
+      typedLead.textContent = leadText;
+    } else {
+      let ci = 0;
+      const typeChar = () => {
+        if (ci <= leadText.length) {
+          typedLead.textContent = leadText.slice(0, ci);
+          ci++;
+          setTimeout(typeChar, 16);
+        }
+      };
+      setTimeout(typeChar, 1700);
+    }
+  }
+
   // ---- Custom cursor ----
   const dot = document.getElementById('cursorDot');
   const ring = document.getElementById('cursorRing');
@@ -56,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animateRing);
     }
     animateRing();
-    document.querySelectorAll('a, button, .btn, .proj-card').forEach(el => {
+    document.querySelectorAll('a, button, .btn, .proj-card, .testi-card, .cert-card').forEach(el => {
       el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
       el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
     });
@@ -112,5 +183,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { threshold: .4 });
   stats.forEach(s => countIO.observe(s));
+
+  // ---- Animated skill bars ----
+  const bars = document.querySelectorAll('.bar-fill');
+  const barIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const width = el.getAttribute('data-width') || '0';
+        requestAnimationFrame(() => { el.style.width = width + '%'; });
+        barIO.unobserve(el);
+      }
+    });
+  }, { threshold: .3 });
+  bars.forEach(b => barIO.observe(b));
 
 });
