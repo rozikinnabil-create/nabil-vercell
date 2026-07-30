@@ -198,4 +198,97 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { threshold: .3 });
   bars.forEach(b => barIO.observe(b));
 
+  // ---- Matrix code rain background ----
+  const matrixCanvas = document.getElementById('matrixCanvas');
+  if (matrixCanvas && !reduceMotion) {
+    const ctx = matrixCanvas.getContext('2d');
+    const chars = 'アイウエオカキクケコサシスセソ0123456789#$%&+-*ESP32MIKROTIK'.split('');
+    let w, h, columns, drops;
+
+    function resizeMatrix() {
+      w = matrixCanvas.width = window.innerWidth;
+      h = matrixCanvas.height = window.innerHeight;
+      columns = Math.floor(w / 18);
+      drops = new Array(columns).fill(1);
+    }
+    resizeMatrix();
+    window.addEventListener('resize', resizeMatrix);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0,0,0,0.08)';
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#C6FF3D';
+      ctx.font = '16px monospace';
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * 18, drops[i] * 18);
+        if (drops[i] * 18 > h && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(drawMatrix, 50);
+  } else if (matrixCanvas) {
+    matrixCanvas.style.display = 'none';
+  }
+
+  // ---- Terminal typing widget ----
+  const terminalBody = document.getElementById('terminalBody');
+  if (terminalBody) {
+    const terminalLines = [
+      { type: 'cmd', text: 'whoami' },
+      { type: 'out', text: 'nabil_rozikin_maulana' },
+      { type: 'cmd', text: 'cat role.txt' },
+      { type: 'out', text: 'TKJ Student — Web Dev / Networking / IoT' },
+      { type: 'cmd', text: 'echo $STATUS' },
+      { type: 'out', text: 'OPEN_FOR_COLLABORATION' }
+    ];
+    const termIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          let li = 0;
+          const typeLine = () => {
+            if (li < terminalLines.length) {
+              const row = terminalLines[li];
+              const div = document.createElement('div');
+              if (row.type === 'cmd') div.className = 'cmd';
+              terminalBody.appendChild(div);
+              let ci = 0;
+              const typeChar = () => {
+                if (ci <= row.text.length) {
+                  div.textContent = row.text.slice(0, ci);
+                  ci++;
+                  setTimeout(typeChar, reduceMotion ? 0 : 28);
+                } else {
+                  li++;
+                  setTimeout(typeLine, 260);
+                }
+              };
+              typeChar();
+            }
+          };
+          typeLine();
+          termIO.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .3 });
+    termIO.observe(terminalBody);
+  }
+
+  // ---- Konami code easter egg ----
+  const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let konamiPos = 0;
+  const toast = document.createElement('div');
+  toast.className = 'easter-toast';
+  toast.textContent = '⚡ HACKER MODE UNLOCKED — NBRZM.SYS SALUTES YOU';
+  document.body.appendChild(toast);
+  window.addEventListener('keydown', (e) => {
+    konamiPos = (e.key === konamiSeq[konamiPos]) ? konamiPos + 1 : 0;
+    if (konamiPos === konamiSeq.length) {
+      konamiPos = 0;
+      toast.classList.add('show');
+      document.documentElement.style.setProperty('--lime', '#39FF14');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  });
+
 });
