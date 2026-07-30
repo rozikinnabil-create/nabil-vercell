@@ -1,220 +1,116 @@
-// ================= Typing Animation =================
+document.addEventListener('DOMContentLoaded', () => {
 
-const text = [
-    "Web Developer",
-    "TKJ Student",
-    "Cyber Security",
-    "Networking",
-    "IoT Developer"
-];
-
-let i = 0;
-let j = 0;
-let current = "";
-let isDeleting = false;
-
-function typing() {
-
-    current = text[i];
-
-    if (!isDeleting) {
-        document.getElementById("typing").textContent =
-            current.substring(0, j++);
-
-        if (j > current.length) {
-            isDeleting = true;
-            setTimeout(typing, 1200);
-            return;
-        }
-
-    } else {
-
-        document.getElementById("typing").textContent =
-            current.substring(0, j--);
-
-        if (j < 0) {
-            isDeleting = false;
-            i++;
-
-            if (i >= text.length) {
-                i = 0;
-            }
-        }
-    }
-
-    setTimeout(typing, isDeleting ? 50 : 100);
-
-}
-
-typing();
-
-
-// ================= Navbar Scroll =================
-
-window.addEventListener("scroll", () => {
-
-    const nav = document.querySelector("nav");
-
-    if (window.scrollY > 60) {
-
-        nav.style.background = "rgba(5,8,22,.95)";
-        nav.style.boxShadow = "0 10px 30px rgba(0,0,0,.6)";
-
-    } else {
-
-        nav.style.background = "rgba(5,8,22,.75)";
-        nav.style.boxShadow = "0 10px 30px rgba(0,0,0,.35)";
-
-    }
-
-});
-
-
-// ================= Scroll Reveal =================
-
-const reveal = document.querySelectorAll(".card,.stat,.project-card");
-
-window.addEventListener("scroll", () => {
-
-    reveal.forEach(item => {
-
-        const top = item.getBoundingClientRect().top;
-
-        if (top < window.innerHeight - 80) {
-
-            item.classList.add("show");
-
-        }
-
+  // ---- Theme toggle ----
+  const themeToggle = document.getElementById('themeToggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('nbrzm-theme', next);
     });
+  }
 
-});
+  // ---- Mobile nav toggle ----
+  const burger = document.querySelector('.burger');
+  const mnav = document.getElementById('mnav');
+  if (burger && mnav) {
+    burger.addEventListener('click', () => mnav.classList.toggle('open'));
+  }
 
-/* ==========================
-   BACK TO TOP
-========================== */
-
-const topBtn = document.getElementById("topBtn");
-
-window.addEventListener("scroll", () => {
-
-    if (window.scrollY > 300) {
-
-        topBtn.style.display = "block";
-
-    } else {
-
-        topBtn.style.display = "none";
-
-    }
-
-});
-
-topBtn.onclick = () => {
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior: "smooth"
-
+  // ---- Scroll reveal with stagger ----
+  const items = document.querySelectorAll('[data-reveal]');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, idx) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('in'), idx * 60);
+        io.unobserve(e.target);
+      }
     });
+  }, { threshold: .15 });
+  items.forEach(i => io.observe(i));
 
-};
+  // ---- Scroll progress bar ----
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    if (progressBar) progressBar.style.width = scrolled + '%';
+  });
 
-/* ==========================
-   LOADER
-========================== */
+  // ---- Custom cursor ----
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  if (dot && ring && matchMedia('(hover:hover)').matches) {
+    let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      dot.style.left = mouseX + 'px';
+      dot.style.top = mouseY + 'px';
+    });
+    function animateRing(){
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+    document.querySelectorAll('a, button, .btn, .proj-card').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
+    });
+  }
 
-window.addEventListener("load", () => {
+  // ---- Magnetic buttons ----
+  document.querySelectorAll('.magnetic').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const r = btn.getBoundingClientRect();
+      const x = e.clientX - r.left - r.width / 2;
+      const y = e.clientY - r.top - r.height / 2;
+      btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
+    });
+    btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
+  });
 
-    const loader = document.getElementById("loader");
+  // ---- Tilt effect on project cards ----
+  document.querySelectorAll('.proj-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateZ(0)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = 'rotateY(0) rotateX(0)'; });
+  });
 
-    setTimeout(() => {
-
-        loader.classList.add("hide");
-
-    }, 1200);
-
-});
-
-/* ==========================
-   COUNTER
-========================== */
-
-const counters = document.querySelectorAll(".counter");
-
-const counterObserver = new IntersectionObserver((entries) => {
-
+  // ---- Animated counters ----
+  const stats = document.querySelectorAll('.stat');
+  const countIO = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            const counter = entry.target;
-
-            const target = +counter.dataset.target;
-
-            let count = 0;
-
-            const speed = target / 80;
-
-            const update = () => {
-
-                count += speed;
-
-                if (count < target) {
-
-                    counter.innerText = Math.ceil(count);
-
-                    requestAnimationFrame(update);
-
-                } else {
-
-                    if(target === 100){
-
-    counter.innerText = "100%";
-
-}else{
-
-    counter.innerText = target + "+";
-
-}
-
-                }
-
-            };
-
-            update();
-
-            counterObserver.unobserve(counter);
-
-        }
-
+      if (entry.isIntersecting) {
+        const statEl = entry.target;
+        const numEl = statEl.querySelector('b');
+        const target = parseInt(numEl.getAttribute('data-count'), 10);
+        const suffix = numEl.getAttribute('data-suffix') || '';
+        let current = 0;
+        const duration = 1000;
+        const stepTime = 16;
+        const steps = duration / stepTime;
+        const increment = target / steps;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
+            statEl.classList.add('counted');
+          }
+          numEl.textContent = Math.floor(current) + suffix;
+        }, stepTime);
+        countIO.unobserve(statEl);
+      }
     });
-
-});
-
-counters.forEach(counter => counterObserver.observe(counter));
-/* ==========================
-   DARK / LIGHT MODE
-========================== */
-
-const themeBtn = document.getElementById("themeToggle");
-
-themeBtn.addEventListener("click", () => {
-
-    document.body.classList.toggle("light");
-
-    themeBtn.style.transform = "rotate(360deg) scale(1.2)";
-
-    setTimeout(() => {
-        themeBtn.style.transform = "";
-    }, 300);
-
-    if(document.body.classList.contains("light")){
-        themeBtn.textContent = "☀️";
-    }else{
-        themeBtn.textContent = "🌙";
-    }
+  }, { threshold: .4 });
+  stats.forEach(s => countIO.observe(s));
 
 });
