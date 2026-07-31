@@ -65,6 +65,9 @@
     <a href="#contact">Contact</a>
   </div>
   <div class="nav-right">
+    <button class="cmdk-trigger" id="cmdkTrigger" aria-label="Open command palette">
+      <span>⌘</span>K
+    </button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
       <span class="knob">
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
@@ -108,6 +111,10 @@
   <div class="hero-photo" data-reveal>
     <img src="assets/nabil/profile.jpg" alt="Nabil Rozikin Maulana">
     <div class="tag"><span class="blink-dot"></span>STATUS: ONLINE</div>
+    <div class="view-counter" id="viewCounter">
+      <span>LOCAL VIEWS</span>
+      <div class="view-digits" id="viewDigits"></div>
+    </div>
   </div>
 </div>
 
@@ -260,10 +267,10 @@
 
 <div class="hazard-banner">
   <div class="hazard-track">
-    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
-    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
-    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
-    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
+    <span>U</span>PELAN-PELAN<span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
+    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP BERJALAN</span><span>★</span>
+    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP BERJALAN</span><span>★</span>
+    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP BERJALAN</span><span>★</span>
   </div>
 </div>
 
@@ -281,6 +288,37 @@
 
 <footer>© 2026 Nabil Rozikin Maulana — Built with HTML, CSS &amp; JavaScript</footer>
 
+<div class="cmdk-overlay" id="cmdkOverlay">
+  <div class="cmdk-box">
+    <div class="cmdk-inputline">
+      <span class="cmdk-icon">›</span>
+      <input type="text" id="cmdkInput" placeholder="Ketik perintah atau tujuan..." autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Command palette input">
+      <span class="cmdk-esc">ESC</span>
+    </div>
+    <div class="cmdk-list" id="cmdkList"></div>
+  </div>
+</div>
+
 <script src="script.js"></script>
+<script>
+  // Fallback: paksa hilangin preloader kalau script.js gagal/error/hang
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      var pl = document.getElementById('preloader');
+      if (pl && !pl.classList.contains('hide')) {
+        pl.classList.add('hide');
+        document.body.style.overflow = '';
+      }
+    }, 4000);
+  });
+  window.addEventListener('error', function (e) {
+    var pl = document.getElementById('preloader');
+    if (pl) {
+      pl.classList.add('hide');
+      document.body.style.overflow = '';
+    }
+    console.error('Script error caught:', e.message);
+  });
+</script>
 </body>
 </html>

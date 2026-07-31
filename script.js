@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  try {
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -460,4 +461,116 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ---- Local view counter (retro digits) ----
+  const viewDigits = document.getElementById('viewDigits');
+  if (viewDigits) {
+    let count = parseInt(localStorage.getItem('nbrzm-views') || '0', 10) + 1;
+    localStorage.setItem('nbrzm-views', String(count));
+    const padded = String(count).padStart(6, '0');
+    viewDigits.innerHTML = padded.split('').map(d => `<span class="view-digit">${d}</span>`).join('');
+  }
+
+  // ---- Command palette (Ctrl/Cmd+K) ----
+  const cmdkOverlay = document.getElementById('cmdkOverlay');
+  const cmdkInput = document.getElementById('cmdkInput');
+  const cmdkList = document.getElementById('cmdkList');
+  const cmdkTrigger = document.getElementById('cmdkTrigger');
+  if (cmdkOverlay && cmdkInput && cmdkList) {
+    const paletteCommands = [
+      { label: 'Go to Home', hint: 'section', action: () => scrollToId('home') },
+      { label: 'Go to About', hint: 'section', action: () => scrollToId('about') },
+      { label: 'Go to Skills', hint: 'section', action: () => scrollToId('skills') },
+      { label: 'Go to Projects', hint: 'section', action: () => scrollToId('projects') },
+      { label: 'Go to Console', hint: 'section', action: () => scrollToId('console') },
+      { label: 'Go to Activity', hint: 'section', action: () => scrollToId('activity') },
+      { label: 'Go to Testimonials', hint: 'section', action: () => scrollToId('testimonials') },
+      { label: 'Go to Certificates', hint: 'section', action: () => scrollToId('certificates') },
+      { label: 'Go to Contact', hint: 'section', action: () => scrollToId('contact') },
+      { label: 'Toggle Theme', hint: 'action', action: () => { if (themeToggle) themeToggle.click(); } },
+      { label: 'Open WhatsApp', hint: 'link', action: () => window.open('https://wa.me/6288210670848', '_blank') },
+      { label: 'Open Instagram', hint: 'link', action: () => window.open('https://instagram.com/nblrzknm._', '_blank') },
+      { label: 'Copy WhatsApp Number', hint: 'copy', action: () => navigator.clipboard && navigator.clipboard.writeText('+62 882-1067-0848') }
+    ];
+
+    function scrollToId(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }
+
+    let filtered = paletteCommands.slice();
+    let activeIndex = 0;
+
+    function renderList() {
+      cmdkList.innerHTML = '';
+      if (filtered.length === 0) {
+        cmdkList.innerHTML = '<div class="cmdk-empty">No matching command</div>';
+        return;
+      }
+      filtered.forEach((cmd, idx) => {
+        const item = document.createElement('div');
+        item.className = 'cmdk-item' + (idx === activeIndex ? ' active' : '');
+        item.innerHTML = `<span>${cmd.label}</span><span class="cmdk-hint">${cmd.hint}</span>`;
+        item.addEventListener('click', () => { cmd.action(); closePalette(); });
+        cmdkList.appendChild(item);
+      });
+    }
+
+    function openPalette() {
+      cmdkOverlay.classList.add('open');
+      cmdkInput.value = '';
+      filtered = paletteCommands.slice();
+      activeIndex = 0;
+      renderList();
+      setTimeout(() => cmdkInput.focus(), 30);
+    }
+
+    function closePalette() {
+      cmdkOverlay.classList.remove('open');
+    }
+
+    if (cmdkTrigger) cmdkTrigger.addEventListener('click', openPalette);
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (cmdkOverlay.classList.contains('open')) closePalette();
+        else openPalette();
+      }
+      if (e.key === 'Escape') closePalette();
+    });
+
+    cmdkOverlay.addEventListener('click', (e) => {
+      if (e.target === cmdkOverlay) closePalette();
+    });
+
+    cmdkInput.addEventListener('input', () => {
+      const q = cmdkInput.value.toLowerCase();
+      filtered = paletteCommands.filter(c => c.label.toLowerCase().includes(q));
+      activeIndex = 0;
+      renderList();
+    });
+
+    cmdkInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
+        renderList();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, 0);
+        renderList();
+      } else if (e.key === 'Enter') {
+        if (filtered[activeIndex]) {
+          filtered[activeIndex].action();
+          closePalette();
+        }
+      }
+    });
+  }
+
+  } catch (err) {
+    console.error('NBRZM script error:', err);
+    const pl = document.getElementById('preloader');
+    if (pl) { pl.classList.add('hide'); document.body.style.overflow = ''; }
+  }
 });
