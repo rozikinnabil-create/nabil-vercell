@@ -503,4 +503,59 @@ html[data-theme="dark"] .hm-0{background:#26272b;}
   .hero p.lead::after{display:none;}
   .preloader{transition:none;}
   .sys-clock-dot{animation:none;}
+  .hazard-track{animation:none;}
+  .spotlight-grid{display:none;}
 }
+
+/* ---- Spotlight grid (hero) ---- */
+.spotlight-grid{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(var(--ink) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ink) 1px, transparent 1px);
+  background-size:32px 32px;
+  opacity:0;
+  -webkit-mask-image:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), #000 0%, transparent 75%);
+  mask-image:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), #000 0%, transparent 75%);
+  transition:opacity .25s ease;
+}
+.hero:hover .spotlight-grid{opacity:.18;}
+@media(hover:none){.spotlight-grid{display:none;}}
+
+/* ---- Angled divider ---- */
+.angle-divider{
+  height:64px;background:var(--terminal-bg);
+  clip-path:polygon(0 0, 100% 100%, 100% 0);
+  border-top:var(--line) solid var(--ink);
+  position:relative;z-index:1;
+}
+@media(max-width:700px){.angle-divider{height:38px;}}
+
+/* ---- Hazard stripe banner ---- */
+.hazard-banner{
+  background:repeating-linear-gradient(135deg, var(--hazard) 0 22px, var(--ink) 22px 44px);
+  border-top:var(--line) solid var(--ink);
+  border-bottom:var(--line) solid var(--ink);
+  overflow:hidden;white-space:nowrap;
+  padding:14px 0;
+}
+.hazard-track{
+  display:inline-block;
+  animation:tickerReverse 16s linear infinite;
+}
+.hazard-track span{
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: .03em;
+  color: #fff;
+  margin-right: 28px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.4); /* opsional agar lebih jelas */
+}
+@keyframes tickerReverse{
+  0%{transform:translateX(-50%);}
+  100%{transform:translateX(0);}
+}
+@media(max-width:700px){
+  .hazard-track span{font-size:.85rem;margin-right:18px;}
+}
+

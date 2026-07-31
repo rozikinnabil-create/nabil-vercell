@@ -447,4 +447,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ---- Spotlight grid follows cursor in hero ----
+  const spotlightGrid = document.getElementById('spotlightGrid');
+  const heroEl = document.getElementById('home');
+  if (spotlightGrid && heroEl && matchMedia('(hover:hover)').matches) {
+    heroEl.addEventListener('mousemove', (e) => {
+      const r = heroEl.getBoundingClientRect();
+      const mx = ((e.clientX - r.left) / r.width) * 100;
+      const my = ((e.clientY - r.top) / r.height) * 100;
+      spotlightGrid.style.setProperty('--mx', mx + '%');
+      spotlightGrid.style.setProperty('--my', my + '%');
+    });
+  }
+
 });
