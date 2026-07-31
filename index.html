@@ -31,6 +31,13 @@
 
 <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
 
+<div class="sys-clock" id="sysClock">
+  <span class="sys-clock-dot"></span>
+  <span id="sysClockTime">--:--:--</span>
+  <span class="sys-clock-sep">·</span>
+  <span id="sysUptime">uptime 0d</span>
+</div>
+
 <div class="ticker-wrap">
   <div class="ticker">
     <span>PING 192.168.1.1 — REPLY OK 4ms</span>
@@ -52,6 +59,8 @@
     <a href="#about">About</a>
     <a href="#skills">Skills</a>
     <a href="#projects">Projects</a>
+    <a href="#console">Console</a>
+    <a href="#activity">Activity</a>
     <a href="#testimonials">Testimonials</a>
     <a href="#contact">Contact</a>
   </div>
@@ -69,6 +78,8 @@
   <a href="#about" style="padding:14px 24px;border-top:2px solid var(--ink);">About</a>
   <a href="#skills" style="padding:14px 24px;border-top:2px solid var(--ink);">Skills</a>
   <a href="#projects" style="padding:14px 24px;border-top:2px solid var(--ink);">Projects</a>
+  <a href="#console" style="padding:14px 24px;border-top:2px solid var(--ink);">Console</a>
+  <a href="#activity" style="padding:14px 24px;border-top:2px solid var(--ink);">Activity</a>
   <a href="#testimonials" style="padding:14px 24px;border-top:2px solid var(--ink);">Testimonials</a>
   <a href="#contact" style="padding:14px 24px;border-top:2px solid var(--ink);">Contact</a>
 </div>
@@ -168,8 +179,43 @@
   </div>
 </section>
 
+<section id="console">
+  <div class="eyebrow">04 — CONSOLE</div>
+  <h2 style="font-size:2rem;margin-bottom:10px;">Try It Yourself</h2>
+  <p style="color:var(--muted);margin-bottom:20px;font-size:.95rem;">Terminal ini beneran bisa diketik. Ketik <code>help</code> buat mulai — atau tekan <code>/</code> di mana aja buat langsung fokus ke sini.</p>
+  <div class="cli-box" data-reveal>
+    <div class="terminal-topbar">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+      <span class="terminal-title">guest@nbrzm: ~</span>
+    </div>
+    <div class="cli-output" id="cliOutput"></div>
+    <div class="cli-inputline">
+      <span class="cli-prompt">guest@nbrzm:~$</span>
+      <input type="text" id="cliInput" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal command input">
+    </div>
+  </div>
+</section>
+
+<section id="activity">
+  <div class="eyebrow">05 — ACTIVITY</div>
+  <h2 style="font-size:2rem;margin-bottom:10px;">Coding Activity</h2>
+  <p style="color:var(--muted);margin-bottom:20px;font-size:.95rem;">Visualisasi progres belajar & ngoding — makin gelap, makin sibuk harinya.</p>
+  <div class="heatmap-wrap" data-reveal>
+    <div class="heatmap-grid" id="heatmapGrid"></div>
+    <div class="heatmap-legend">
+      <span>Less</span>
+      <span class="hm-swatch hm-0"></span>
+      <span class="hm-swatch hm-1"></span>
+      <span class="hm-swatch hm-2"></span>
+      <span class="hm-swatch hm-3"></span>
+      <span class="hm-swatch hm-4"></span>
+      <span>More</span>
+    </div>
+  </div>
+</section>
+
 <section id="testimonials">
-  <div class="eyebrow">04 — TESTIMONIALS</div>
+  <div class="eyebrow">06 — TESTIMONIALS</div>
   <h2 style="font-size:2rem;margin-bottom:28px;">What People Say</h2>
   <div class="testi-grid">
     <div class="testi-card" data-reveal>
@@ -188,7 +234,7 @@
 </section>
 
 <section id="certificates">
-  <div class="eyebrow">05 — CERTIFICATES</div>
+  <div class="eyebrow">07 — CERTIFICATES</div>
   <h2 style="font-size:2rem;margin-bottom:28px;">Certificates</h2>
   <div class="cert-grid">
     <div class="cert-card" data-reveal>

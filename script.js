@@ -291,4 +291,160 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // ---- Interactive console (CLI) ----
+  const cliOutput = document.getElementById('cliOutput');
+  const cliInput = document.getElementById('cliInput');
+  if (cliOutput && cliInput) {
+    const printLine = (text, cls) => {
+      const div = document.createElement('div');
+      if (cls) div.className = cls;
+      div.textContent = text;
+      cliOutput.appendChild(div);
+      cliOutput.scrollTop = cliOutput.scrollHeight;
+    };
+
+    const commands = {
+      help: () => [
+        'Available commands:',
+        '  help        - show this list',
+        '  whoami      - who am I',
+        '  about       - short bio',
+        '  skills      - list my skills',
+        '  projects    - list my projects',
+        '  contact     - how to reach me',
+        '  neofetch    - system info flex',
+        '  sudo hire-me',
+        '  clear       - clear the screen'
+      ],
+      whoami: () => ['nabil_rozikin_maulana'],
+      about: () => [
+        'Siswa Teknik Komputer dan Jaringan (TKJ).',
+        'Fokus: Web Development, Networking, Cyber Security, IoT.',
+        'Belajar sambil bikin project yang beneran jalan.'
+      ],
+      skills: () => [
+        'HTML          [##########] 90%',
+        'CSS           [########  ] 85%',
+        'JavaScript    [########  ] 75%',
+        'Networking    [##########] 90%',
+        'Arduino/ESP32 [########  ] 85%'
+      ],
+      projects: () => [
+        '1. Personal Portfolio  — HTML/CSS/JS',
+        '2. Robot Pathfinder    — ESP32 line follower',
+        '3. IoT Monitoring      — ESP32 remote monitoring',
+        'Scroll up to #projects for links.'
+      ],
+      contact: () => [
+        'Instagram : instagram.com/nblrzknm._',
+        'WhatsApp  : wa.me/6288210670848',
+        'Telegram  : t.me/apalaabing'
+      ],
+      neofetch: () => [
+        '        /\\        guest@nbrzm',
+        '       /  \\       -------------',
+        '      / /\\ \\      OS: NBRZM.KINN v1.0',
+        '     / ____ \\     Host: TKJ Student',
+        '    /_/    \\_\\    Shell: nbrzm-cli',
+        '                  Uptime: since 2024',
+        '                  Stack: HTML, CSS, JS',
+        '                  Focus: Web / Network / IoT'
+      ],
+      'sudo hire-me': () => [
+        '[sudo] password for guest: ********',
+        'Permission granted.',
+        'Redirecting to #contact in 3... 2... 1...'
+      ]
+    };
+
+    const runCommand = (raw) => {
+      const cmd = raw.trim();
+      if (!cmd) return;
+      printLine(cmd, 'cli-line-cmd');
+      if (cmd.toLowerCase() === 'clear') {
+        cliOutput.innerHTML = '';
+        return;
+      }
+      const key = cmd.toLowerCase();
+      if (commands[key]) {
+        commands[key]().forEach(line => printLine(line));
+        if (key === 'sudo hire-me') {
+          setTimeout(() => {
+            document.getElementById('contact').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+          }, 900);
+        }
+      } else {
+        printLine(`command not found: ${cmd} — type "help"`, 'cli-line-err');
+      }
+    };
+
+    printLine('NBRZM.KINN interactive console — type "help" to start.');
+    cliInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        runCommand(cliInput.value);
+        cliInput.value = '';
+      }
+    });
+    cliOutput.addEventListener('click', () => cliInput.focus());
+
+    // ---- Keyboard shortcut: press "/" to focus console ----
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && document.activeElement !== cliInput) {
+        e.preventDefault();
+        document.getElementById('console').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        setTimeout(() => cliInput.focus(), reduceMotion ? 0 : 400);
+      }
+    });
+  }
+
+  // ---- Live system clock + uptime ----
+  const sysClockTime = document.getElementById('sysClockTime');
+  const sysUptime = document.getElementById('sysUptime');
+  if (sysClockTime && sysUptime) {
+    const siteEpoch = new Date('2024-01-01T00:00:00');
+    const updateClock = () => {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      sysClockTime.textContent = timeStr + ' WIB';
+      const days = Math.floor((now - siteEpoch) / 86400000);
+      sysUptime.textContent = `uptime ${days}d`;
+    };
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
+  // ---- Activity heatmap (GitHub-style) ----
+  const heatmapGrid = document.getElementById('heatmapGrid');
+  if (heatmapGrid) {
+    const weeks = 26;
+    const totalDays = weeks * 7;
+    const today = new Date();
+    const tooltip = document.createElement('div');
+    tooltip.className = 'hm-tooltip';
+    document.body.appendChild(tooltip);
+
+    for (let i = totalDays - 1; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      const cell = document.createElement('div');
+      const rand = Math.random();
+      let level = 0;
+      if (rand > 0.85) level = 4;
+      else if (rand > 0.7) level = 3;
+      else if (rand > 0.5) level = 2;
+      else if (rand > 0.3) level = 1;
+      cell.className = `hm-cell hm-${level}`;
+      const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      const commitWord = level === 0 ? 'no activity' : `${level * 2} contributions`;
+      cell.addEventListener('mousemove', (e) => {
+        tooltip.textContent = `${commitWord} on ${dateStr}`;
+        tooltip.style.left = e.clientX + 14 + 'px';
+        tooltip.style.top = e.clientY + 14 + 'px';
+        tooltip.classList.add('show');
+      });
+      cell.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
+      heatmapGrid.appendChild(cell);
+    }
+  }
+
 });
