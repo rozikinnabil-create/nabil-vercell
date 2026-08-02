@@ -308,6 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
       help: () => [
         'Available commands:',
         '  help        - show this list',
+        '  debian      - ubuntu/debian server cheatsheet',
         '  whoami      - who am I',
         '  about       - short bio',
         '  skills      - list my skills',
@@ -316,6 +317,111 @@ document.addEventListener('DOMContentLoaded', () => {
         '  neofetch    - system info flex',
         '  sudo hire-me',
         '  clear       - clear the screen'
+      ],
+      debian: () => [
+        '=== UPDATE UBUNTU ===',
+        'sudo apt update, sudo apt upgrade -y',
+        '',
+        '=== BERPINDAH ROOT ===',
+        '- su -',
+        '',
+        '=== LIHAT DAFTAR REPOSITORY ===',
+        '- sudo nano /etc/apt/sources.list',
+        '',
+        '=== ISI REPOSITORY ===',
+        'deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse',
+        'deb http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse',
+        'deb http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse',
+        '',
+        '=== INSTALL DOCKER / DOCKER COMPOSE ===',
+        '- sudo apt install docker.io -y',
+        '- sudo apt install docker-compose -y',
+        '- sudo systemctl enable --now docker',
+        '- docker -v',
+        '- docker-compose -v',
+        '',
+        '=== MEMBUAT FOLDER OWNCLOUD ===',
+        '- mkdir ~/owncloud-docker',
+        '- cd ~/owncloud-docker',
+        '- nano docker-compose.yaml',
+        '',
+        '=== ISI DOCKER-COMPOSE.YAML ===',
+        "version: '3'",
+        '',
+        'services:',
+        '  owncloud:',
+        '    image: owncloud/server:10.13',
+        '    container_name: owncloud',
+        '    restart: always',
+        '    ports:',
+        '      - "8080:8080"',
+        '    depends_on:',
+        '      - db',
+        '    environment:',
+        '      - OWNCLOUD_DB_TYPE=mysql',
+        '      - OWNCLOUD_DB_NAME=owncloud',
+        '      - OWNCLOUD_DB_USERNAME=owncloud',
+        '      - OWNCLOUD_DB_PASSWORD=owncloud',
+        '      - OWNCLOUD_DB_HOST=db',
+        '      - OWNCLOUD_ADMIN_USERNAME=admin',
+        '      - OWNCLOUD_ADMIN_PASSWORD=admin',
+        '      - OWNCLOUD_DOMAIN=(isi ip)',
+        '    volumes:',
+        '      - owncloud_files:/mnt/data',
+        '',
+        '  db:',
+        '    image: mariadb:10.6',
+        '    container_name: owncloud_db',
+        '    restart: always',
+        '    environment:',
+        '      - MYSQL_ROOT_PASSWORD=secret',
+        '      - MYSQL_USER=owncloud',
+        '      - MYSQL_PASSWORD=owncloud',
+        '      - MYSQL_DATABASE=owncloud',
+        '    volumes:',
+        '      - db_data:/var/lib/mysql',
+        '',
+        'volumes:',
+        '  owncloud_files:',
+        '  db_data:',
+        '',
+        '=== MENJALANKAN OWNCLOUD ===',
+        '- sudo docker-compose up -d',
+        '',
+        '=== MENGECEK CONTAINER ===',
+        '- docker ps',
+        '',
+        '=== MELIHAT SEMUA CONTAINER ===',
+        '- docker ps -a',
+        '',
+        '=== MENGHENTIKAN CONTAINER ===',
+        '- docker-compose down',
+        '',
+        '=== MENGHAPUS SEMUA CONTAINER & VOLUME ===',
+        '- sudo docker-compose down -v',
+        '',
+        '=== AA PANEL ===',
+        'Install wget & curl:',
+        '- sudo apt install -y wget curl',
+        '',
+        'Download installer:',
+        '- wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh',
+        '',
+        'Install aapanel:',
+        '- sudo bash install.sh',
+        '',
+        'Membuka firewall:',
+        '- sudo ufw allow (isi nomor yang kuning)',
+        '- sudo ufw reload',
+        '',
+        'Perintah aapanel:',
+        '- sudo bt 9',
+        '- sudo bt 14',
+        '- bt default',
+        '- sudo bt 5',
+        '',
+        'Menampilkan/mengubah password panel:',
+        '- sudo bt 6'
       ],
       whoami: () => ['nabil_rozikin_maulana'],
       about: () => [
@@ -574,3 +680,145 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pl) { pl.classList.add('hide'); document.body.style.overflow = ''; }
   }
 });
+// SIMULASI PING REALTIME
+setInterval(() => {
+  const pingElement = document.getElementById('pingDisplay');
+  if (pingElement) {
+    const randomPing = Math.floor(Math.random() * (28 - 12 + 1)) + 12;
+    pingElement.textContent = `PING: ${randomPing}ms`;
+  }
+}, 2000);
+// Web Audio API untuk SFX Retro
+const playKeySound = () => {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(400 + Math.random() * 200, ctx.currentTime);
+    
+    gain.gain.setValueAtTime(0.015, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.05);
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    osc.start();
+    osc.stop(ctx.currentTime + 0.05);
+  } catch (e) {
+    // Ignore error jika browser memblokir autoplay
+  }
+};
+
+// Pasang suara ke input terminal
+const cliInput = document.getElementById('cliInput');
+if (cliInput) {
+  cliInput.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') {
+      playKeySound();
+    }
+  });
+}
+// Fungsi jalankan perintah via chip
+function runQuickCmd(cmd) {
+  const input = document.getElementById('cliInput');
+  if (input) {
+    input.value = cmd;
+    // Simulasi penekanan tombol Enter
+    const event = new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 });
+    input.dispatchEvent(event);
+    playKeySound();
+  }
+}
+// ==========================================
+// BGM ENGINE WITH ANIMATION & RELIABLE MP3
+// ==========================================
+
+const playlist = [
+  { title: "Cyber Ambient", url: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" },
+  { title: "Lofi Chill", url: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" }
+];
+
+let currentTrackIndex = 0;
+let isPlaying = false;
+const bgmAudio = new Audio();
+bgmAudio.volume = 0.3; // Volume 30%
+
+function updateBgmUI() {
+  const bgmBtn = document.getElementById('bgmTitle');
+  if (!bgmBtn) return;
+
+  if (isPlaying) {
+    // Mengubah tampilan menjadi ON + Ikon Animasi
+    bgmBtn.innerHTML = `<span class="bgm-wave">📊</span> ON: ${playlist[currentTrackIndex].title}`;
+    bgmBtn.classList.add('bgm-active');
+  } else {
+    // Mengubah tampilan kembali ke OFF
+    bgmBtn.innerHTML = `🎵 BGM: OFF`;
+    bgmBtn.classList.remove('bgm-active');
+  }
+}
+
+function toggleBgm() {
+  if (isPlaying) {
+    bgmAudio.pause();
+    isPlaying = false;
+    updateBgmUI();
+  } else {
+    bgmAudio.src = playlist[currentTrackIndex].url;
+
+    bgmAudio.play().then(() => {
+      isPlaying = true;
+      updateBgmUI();
+    }).catch((err) => {
+      console.log("Play error, mencoba track berikutnya:", err);
+      // Cadangan jika file pertama gagal dimuat
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      bgmAudio.src = playlist[currentTrackIndex].url;
+      bgmAudio.play().then(() => {
+        isPlaying = true;
+        updateBgmUI();
+      });
+    });
+  }
+}
+
+// Otomatis pindah lagu saat lagu habis
+bgmAudio.addEventListener('ended', () => {
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  bgmAudio.src = playlist[currentTrackIndex].url;
+  bgmAudio.play().then(() => {
+    isPlaying = true;
+    updateBgmUI();
+  });
+});
+// ==========================================
+// GLOBAL VISIT COUNTER (COUNTERAPI.DEV)
+// ==========================================
+
+function initVisitCounter() {
+  const digitsContainer = document.getElementById('viewDigits');
+  if (!digitsContainer) return;
+
+  // Endpoint hit (menambah +1 view setiap halaman dibuka)
+  const apiUrl = "https://api.counterapi.dev/v1/nbrzm-kinn-portfolio/page-views/up";
+
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      // Ambil angka count terbaru
+      const totalViews = String(data.count || 1).padStart(6, '0');
+      
+      // Masukkan ke boks angka berdigit
+      digitsContainer.innerHTML = totalViews
+        .split('')
+        .map(digit => `<span>${digit}</span>`)
+        .join('');
+    })
+    .catch(error => {
+      console.log("Gagal memuat counter:", error);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', initVisitCounter);

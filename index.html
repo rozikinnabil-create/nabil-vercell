@@ -18,11 +18,22 @@
 <body>
 <canvas id="matrixCanvas" class="matrix-canvas"></canvas>
 <div class="noise-overlay"></div>
-
+<div class="scanlines"></div>
+<div class="network-nodes">
+  <div class="node node-1" data-label="192.168.1.1 [GATEWAY]"></div>
+  <div class="node node-2" data-label="10.0.0.254 [DNS]"></div>
+  <div class="node node-3" data-label="PORT: 8080 [LISTEN]"></div>
+</div>
 <div class="preloader" id="preloader">
   <div class="preloader-text">NBRZM<span>.</span>KINN</div>
   <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
   <div class="preloader-log" id="preloaderLog"></div>
+  <div class="net-status-widget">
+  <span class="status-dot"></span>
+  <span id="pingDisplay">PING: 14ms</span> | 
+  <span>ETH0: UP</span>
+</div>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c8a304ed93084cdeb71c3d939f95e61d"}'></script><!-- End Cloudflare Web Analytics -->
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
@@ -36,6 +47,8 @@
   <span id="sysClockTime">--:--:--</span>
   <span class="sys-clock-sep">·</span>
   <span id="sysUptime">uptime 0d</span>
+  <span class="status-divider">|</span>
+  <span id="bgmTitle" class="bgm-btn" onclick="toggleBgm()">🎵 BGM: OFF</span>
 </div>
 
 <div class="ticker-wrap">
@@ -192,7 +205,15 @@
 <section id="console">
   <div class="eyebrow">04 — CONSOLE</div>
   <h2 style="font-size:2rem;margin-bottom:10px;">Try It Yourself</h2>
-  <p style="color:var(--muted);margin-bottom:20px;font-size:.95rem;">Terminal ini beneran bisa diketik. Ketik <code>help</code> buat mulai — atau tekan <code>/</code> di mana aja buat langsung fokus ke sini.</p>
+<p style="color:var(--muted);margin-bottom:20px;font-size:.95rem;">
+  Terminal ini beneran bisa diketik. Ketik <code>help</code> atau <code>debian</code> buat mulai — atau tekan <code>/</code> di mana aja buat langsung fokus ke sini.
+</p>
+<div class="cmd-chips">
+  <span onclick="runQuickCmd('debian')">⚡ debian</span>
+  <span onclick="runQuickCmd('skills')">💻 skills</span>
+  <span onclick="runQuickCmd('neofetch')">📊 neofetch</span>
+  <span onclick="runQuickCmd('clear')">🧹 clear</span>
+</div>
   <div class="cli-box" data-reveal>
     <div class="terminal-topbar">
       <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>

@@ -270,10 +270,18 @@ html[data-theme="dark"] .icon-moon{display:block;}
   margin-top:6px;border:3px solid var(--ink);box-shadow:var(--shadow);background:var(--terminal-bg);
   overflow:hidden;
 }
-.cli-output{
-  padding:18px;font-family:var(--font-mono);font-size:.82rem;color:var(--terminal-fg);
-  min-height:180px;max-height:340px;overflow-y:auto;line-height:1.75;white-space:pre-wrap;
+.cli-output {
+  padding: 18px;
+  font-family: var(--font-mono);
+  font-size: .82rem;
+  color: var(--terminal-fg);
+  min-height: 180px;
+  max-height: 420px; /* Boleh dinaikkan sedikit dari 340px agar area scroll lebih leluasa */
+  overflow-y: auto;
+  line-height: 1.6;
+  white-space: pre-wrap; /* Wajib ada agar spasi & indentasi YAML tidak hilang */
 }
+
 .cli-output .cli-line-cmd{color:#fff;}
 .cli-output .cli-line-cmd::before{content:"guest@nbrzm:~$ ";color:var(--lime);}
 .cli-output .cli-line-err{color:var(--pink);}
@@ -500,17 +508,8 @@ html[data-theme="dark"] .hm-0{background:#26272a;}
 .hm-tooltip.show{opacity:1;}
 
 /* ---- Angle divider ---- */
-.angle-divider{
-  height:40px;
-  background:var(--ink);
-  clip-path:polygon(0 0,100% 0,100% 100%,0 40%);
-  width:100vw;
-  margin-left:calc(50% - 50vw);
-  margin-right:calc(50% - 50vw);
-  margin-top:40px;
-  margin-bottom:40px;
-  position:relative;
-  z-index:1;
+.angle-divider {
+  display: none;
 }
 
 /* ---- Hazard banner (marquee) ---- */
@@ -597,4 +596,220 @@ html[data-theme="dark"] .spotlight-grid{opacity:.1;}
 }
 #console{
   padding-top:120px;
+}
+/* ==========================================
+   EFEK CYBER SCREEN OVERLAY (LEBIH HALUS)
+   ========================================== */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  /* Garis horizontal super tipis + Efek Vignette di sudut layar */
+  background: 
+    linear-gradient(rgba(0, 255, 102, 0.03) 50%, rgba(0, 0, 0, 0.1) 50%),
+    radial-gradient(circle, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+  background-size: 100% 2px, 100% 100%; /* Ukuran garis dipangkas jadi 2px */
+  opacity: 0.8;
+}
+/* ==========================================
+   NETWORK NODES ELEMEN (TOPOLOGI JARINGAN)
+   ========================================== */
+.network-nodes {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--accent, #00ff66);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent, #00ff66);
+  animation: pulse-node 3s infinite alternate ease-in-out;
+}
+
+.node::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 14px;
+  top: -4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.65rem;
+  color: var(--accent, #00ff66);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* Posisi Node */
+.node-1 { top: 20%; left: 10%; }
+.node-2 { top: 60%; right: 12%; animation-delay: 1s; }
+.node-3 { top: 80%; left: 15%; animation-delay: 2s; }
+
+@keyframes pulse-node {
+  0% { transform: scale(1); opacity: 0.4; }
+  100% { transform: scale(1.5); opacity: 1; }
+}
+/* ==========================================
+   LIVE PING STATUS WIDGET
+   ========================================== */
+.net-status-widget {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--accent, #00ff66);
+  padding: 4px 10px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: var(--accent, #00ff66);
+  border-radius: 4px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #00ff66;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #00ff66;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.2; }
+}
+/* ==========================================
+   QUICK COMMAND CHIPS
+   ========================================== */
+.cmd-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  z-index: 10;
+  position: relative;
+}
+
+.cmd-chips span {
+  background: var(--bg-card, #111);
+  border: 1px solid var(--accent, #00ff66);
+  color: var(--accent, #00ff66);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.cmd-chips span:hover {
+  background: var(--accent, #00ff66);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 255, 102, 0.3);
+}
+/* ==========================================
+   BGM WIDGET (POSISI PASTI TAMPIL DI KANAN BAWAH)
+   ========================================== */
+.bgm-widget {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 15px !important;
+  left: auto !important;
+  background: #000000 !important;
+  border: 2px solid var(--accent, #00ff66) !important;
+  padding: 6px 12px !important;
+  font-family: var(--font-mono, monospace) !important;
+  font-size: 0.75rem !important;
+  color: var(--accent, #00ff66) !important;
+  border-radius: 4px !important;
+  z-index: 99999 !important; /* Memastikan melayang paling atas */
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  box-shadow: 3px 3px 0px #00ff66 !important; /* Gaya Neo-Brutalism */
+  user-select: none !important;
+}
+
+.bgm-widget:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #00ff66 !important;
+}
+/* ==========================================
+   STATUS BAR & BGM WIDGET (COMBINED)
+   ========================================== */
+.status-bar-box {
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  background: #000000;
+  border: 1px solid var(--accent, #00ff66);
+  padding: 6px 12px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.7rem;
+  color: #ffffff;
+  border-radius: 4px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+}
+
+/* Pembatas garis tegak */
+.status-divider {
+  color: #444444;
+}
+
+/* ==========================================
+   BGM BUTTON & ANIMATION STYLE
+   ========================================== */
+.bgm-btn {
+  color: var(--accent, #00ff66);
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+/* Hilangkan underline default saat diklik */
+.bgm-btn:hover {
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+/* Efek bercahaya saat BGM aktif (ON) */
+.bgm-btn.bgm-active {
+  color: #00ff66;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
+}
+
+/* Animasi indikator equalizer/wave berkedip saat ON */
+.bgm-wave {
+  display: inline-block;
+  animation: pulse-wave 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-wave {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 1; }
 }
