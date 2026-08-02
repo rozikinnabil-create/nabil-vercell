@@ -818,3 +818,35 @@ html[data-theme="dark"] .spotlight-grid{opacity:.1;}
   0% { transform: scale(0.9); opacity: 0.5; }
   100% { transform: scale(1.2); opacity: 1; }
 }
+@media (max-width: 600px) {
+  /* Mencegah isi navbar meluber */
+  .navbar, header {
+    padding: 10px 8px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+
+  /* Mengecilkan logo/brand teks */
+  .brand, .logo {
+    font-size: 0.9rem !important;
+  }
+
+  /* Sembunyikan tombol shortcut '⌘ K' di HP agar tidak mempersempit navbar */
+  .shortcut-btn, .search-btn { 
+    display: none !important; 
+  }
+
+  /* Mengecilkan padding tombol menu & theme */
+  .menu-btn, .theme-toggle, nav button {
+    padding: 6px 10px !important;
+    font-size: 0.8rem !important;
+  }
+}
+@media (max-width: 600px) {
+  /* Naikkan posisi panah di atas bar BGM */
+  .back-to-top, .scroll-top {
+    bottom: 60px !important; /* Menaikkan posisi tombol dari bawah */
+    right: 15px !important;
+    z-index: 999 !important;
+  }
+}
