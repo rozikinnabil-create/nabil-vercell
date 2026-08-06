@@ -173,32 +173,62 @@
 </section>
 
 <section id="projects">
-  <div class="eyebrow">03 — PROJECTS</div>
-  <h2 style="font-size:2rem;margin-bottom:28px;">My Projects</h2>
+  <div class="eyebrow">03 — PORTFOLIO</div>
+  <h2 style="font-size:2rem;margin-bottom:28px;">My Overview</h2>
   <div class="proj-grid">
+    
+    <!-- KARTU 1: ABOUT ME -->
     <div class="proj-card" data-reveal>
-      <div class="proj-top"><div class="num">PRJ / 01</div><h3>💻 Personal Portfolio</h3></div>
+      <div class="proj-top">
+        <div class="num">INFO / 01</div>
+        <h3>🙋‍♂️ ABOUT ME</h3>
+      </div>
       <div class="proj-body">
-        <p>Website portfolio modern menggunakan HTML, CSS, dan JavaScript.</p>
-        <a class="proj-link" href="/nabil-vercell/assets/project/portfolio.html" target="_blank" rel="noopener noreferrer">View Project ↗</a>
+        <p>Siswa TKJ & Web Developer enthusiast yang berfokus pada Computer Networking, Laravel, dan System Administration.</p>
+        <button class="btn-view" onclick="openModal('about')">View Details ↗</button>
       </div>
     </div>
+
+    <!-- KARTU 2: MY DREAM -->
     <div class="proj-card" data-reveal>
-      <div class="proj-top"><div class="num">PRJ / 02</div><h3>🤖 Robot Pathfinder</h3></div>
+      <div class="proj-top">
+        <div class="num">GOAL / 02</div>
+        <h3>🚀 MY DREAM</h3>
+      </div>
       <div class="proj-body">
-        <p>Robot Line Follower berbasis ESP32 menggunakan sensor infrared.</p>
-        <a class="proj-link" href="/project/pathfinder.html" target="_blank" rel="noopener noreferrer">View Project ↗</a>
+        <p>Target karir menjadi Network Engineer & Full-Stack Developer profesional serta membangun infrastruktur sistem modern.</p>
+        <button class="btn-view" onclick="openModal('dream')">View Details ↗</button>
       </div>
     </div>
+
+    <!-- KARTU 3: MY PROJECTS -->
     <div class="proj-card" data-reveal>
-      <div class="proj-top"><div class="num">PRJ / 03</div><h3>📡 IoT Monitoring</h3></div>
+      <div class="proj-top">
+        <div class="num">PORT / 03</div>
+        <h3>💻 MY PROJECTS</h3>
+      </div>
       <div class="proj-body">
-        <p>Sistem monitoring berbasis ESP32 yang dapat dipantau melalui internet.</p>
-        <a class="proj-link" href="/project/iot.html" target="_blank" rel="noopener noreferrer">View Project ↗</a>
+        <p>Kumpulan projek hands-on mencakup Web Application (Laravel), Konfigurasi Router Cisco, dan Sistem Monitoring.</p>
+        <button class="btn-view" onclick="openModal('projects')">View Details ↗</button>
       </div>
     </div>
+
   </div>
 </section>
+
+<!-- TARO INI TEPAT DI BAWAH SECTION DI ATAS (SEBELUM TAG </body>) -->
+<div id="detailModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">TITLE</h2>
+      <button class="btn-close" onclick="closeModal()">[X] CLOSE</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Isi detail akan otomatis masuk di sini dari script.js -->
+    </div>
+  </div>
+</div>
+
 
 <div class="angle-divider"></div>
 

@@ -1000,5 +1000,85 @@ function initVisitCounter() {
     })
     .catch(error => console.log("Gagal memuat counter:", error));
 }
+// DATA ISI HALAMAN DETAIL
+const modalData = {
+    about: {
+        title: "🙋‍♂️ ABOUT ME",
+        content: `
+            <p>Halo! Saya adalah seorang siswa jurusan <b>Teknik Komputer & Jaringan (TKJ/TJKT)</b> yang berfokus pada pengembangan jaringan komputer, administrasi server, dan pemrograman web modern.</p>
+            <br>
+            <h4>⚡ SKILLS & KEAHLIAN</h4>
+            <ul>
+                <li><b>Computer Networking:</b> TCP/IP, Subnetting IPv4, Cisco Packet Tracer, Routing Static & Dynamic (RIP/OSPF), MikroTik.</li>
+                <li><b>Web Development:</b> HTML5, CSS3, JavaScript, PHP, Laravel Framework, Blade Templating Engine.</li>
+                <li><b>System Administration:</b> Linux/Debian Server Configuration, Web Server (Apache/Nginx), SSH, FTP.</li>
+            </ul>
+            <br>
+            <h4>📌 PENGALAMAN & AKTIVITAS</h4>
+            <p>Aktif mengerjakan projek simulasi jaringan jaringan skala lokal (LAN/WAN) serta mengembangkan aplikasi web berbasis Laravel untuk kebutuhan manajemen sistem.</p>
+        `
+    },
+    dream: {
+        title: "🚀 MY DREAM & GOALS",
+        content: `
+            <p>Cita-cita utama saya adalah berkembang menjadi seorang profesional IT terkemuka di bidang <b>Network Architecture & Cloud Engineering</b>.</p>
+            <br>
+            <h4>🎯 TARGET JANGKA PENDEK</h4>
+            <ul>
+                <li>Mendapatkan sertifikasi industri IT internasional (seperti CCNA atau MTCNA).</li>
+                <li>Menguasai arsitektur *Full-Stack Web Development* berbasis Laravel dan sistem RESTful API.</li>
+                <li>Menyelesaikan program Praktik Kerja Lapangan (PKL) dengan hasil dan kontribusi terbaik.</li>
+            </ul>
+            <br>
+            <h4>🌟 TARGET JANGKA PANJANG</h4>
+            <ul>
+                <li>Menjadi Network Engineer / Cloud Infrastructure Lead di perusahaan teknologi terkemuka.</li>
+                <li>Membangun platform software dan otomasi jaringan modern untuk efisiensi bisnis.</li>
+            </ul>
+        `
+    },
+    projects: {
+        title: "💻 MY FEATURED PROJECTS",
+        content: `
+            <p>Berikut adalah beberapa projek utama yang telah saya kembangkan:</p>
+            <br>
+            <h4>1. Interactive Cyberpunk Portfolio Web</h4>
+            <p>Website portofolio pribadi bertema <i>Neo-Brutalism</i> dilengkapi dengan fitur CLI terminal interaktif, widget ping real-time, dan pemutar musik BGM.</p>
+            <br>
+            <h4>2. Perancangan & Routing Jaringan Cisco</h4>
+            <p>Simulasi arsitektur jaringan multi-router menggunakan Cisco Packet Tracer dengan implementasi DHCP Server, OSPF Routing, dan VLAN Segmentation.</p>
+            <br>
+            <h4>3. Aplikasi Web Manajemen Data (Laravel)</h4>
+            <p>Sistem informasi berbasis Laravel Eloquent ORM dengan dukungan otentikasi login, operasi CRUD lengkap, dan manajemen basis data MySQL.</p>
+        `
+    }
+};
+
+// FUNGSI MEMBUKA HALAMAN DETAIL
+function openModal(type) {
+    const modal = document.getElementById('detailModal');
+    const titleEl = document.getElementById('modalTitle');
+    const bodyEl = document.getElementById('modalBody');
+
+    if (modalData[type]) {
+        titleEl.innerHTML = modalData[type].title;
+        bodyEl.innerHTML = modalData[type].content;
+        modal.classList.add('active');
+    }
+}
+
+// FUNGSI MENUTUP HALAMAN DETAIL
+function closeModal() {
+    const modal = document.getElementById('detailModal');
+    modal.classList.remove('active');
+}
+
+// MENUTUP MODAL JIKA KLIK DI LUAR BOX
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('detailModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+});
 
 document.addEventListener('DOMContentLoaded', initVisitCounter);
