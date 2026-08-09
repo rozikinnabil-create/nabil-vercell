@@ -24,16 +24,16 @@
   <div class="node node-2" data-label="10.0.0.254 [DNS]"></div>
   <div class="node node-3" data-label="PORT: 8080 [LISTEN]"></div>
 </div>
+
 <div class="preloader" id="preloader">
   <div class="preloader-text">NBRZM<span>.</span>KINN</div>
   <div class="preloader-bar"><div class="preloader-fill" id="preloaderFill"></div></div>
   <div class="preloader-log" id="preloaderLog"></div>
   <div class="net-status-widget">
-  <span class="status-dot"></span>
-  <span id="pingDisplay">PING: 14ms</span> | 
-  <span>ETH0: UP</span>
-</div>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c8a304ed93084cdeb71c3d939f95e61d"}'></script><!-- End Cloudflare Web Analytics -->
+    <span class="status-dot"></span>
+    <span id="pingDisplay">PING: 14ms</span> | 
+    <span>ETH0: UP</span>
+  </div>
 </div>
 
 <div class="progress-bar" id="progressBar"></div>
@@ -90,6 +90,7 @@
     <div class="burger">MENU</div>
   </div>
 </nav>
+
 <div id="mnav" style="display:none;flex-direction:column;border-bottom:4px solid var(--ink);font-family:var(--font-mono);text-transform:uppercase;">
   <a href="#about" style="padding:14px 24px;border-top:2px solid var(--ink);">About</a>
   <a href="#skills" style="padding:14px 24px;border-top:2px solid var(--ink);">Skills</a>
@@ -108,15 +109,15 @@
   <div class="float-shape shape-square" style="bottom:4%;right:10%;"></div>
   <div data-reveal>
     <div class="eyebrow">TKJ STUDENT / NETWORK &amp; IoT</div>
-       <h1 class="glitch" data-text="I BUILD NETWORKS, ROBOTS & THE WEB.">I BUILD <span class="hl">NETWORKS</span>, ROBOTS &amp; THE WEB.</h1>
+    <h1 class="glitch" data-text="I BUILD NETWORKS, ROBOTS & THE WEB.">I BUILD <span class="hl">NETWORKS</span>, ROBOTS &amp; THE WEB.</h1>
     <p class="lead" id="typedLead"></p>
     <div class="btn-row">
       <div class="badge-row">
-  <span class="badge badge-green">build: passing</span>
-  <span class="badge badge-blue">status: online</span>
-  <span class="badge badge-yellow">coffee: low</span>
-  <span class="badge badge-pink">license: MIT</span>
-</div>
+        <span class="badge badge-green">build: passing</span>
+        <span class="badge badge-blue">status: online</span>
+        <span class="badge badge-yellow">coffee: low</span>
+        <span class="badge badge-pink">license: MIT</span>
+      </div>
       <a href="#projects" class="btn primary magnetic">Lihat Project ↓</a>
       <a href="#contact" class="btn alt magnetic">Hubungi Saya</a>
     </div>
@@ -146,12 +147,12 @@
       <p style="margin-top:14px;">Dari konfigurasi Mikrotik sampai merakit robot line-follower pakai ESP32, saya senang ngulik hal baru dan nyari solusi ketika project nggak jalan sesuai rencana.</p>
     </div>
     <div class="terminal-box" data-reveal>
-  <div class="terminal-topbar">
-    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-    <span class="terminal-title">nabil@nbrzm: ~</span>
-  </div>
-  <div class="terminal-body" id="terminalBody"></div>
-</div>
+      <div class="terminal-topbar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="terminal-title">nabil@nbrzm: ~</span>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+    </div>
     <div data-reveal>
       <div class="focus-card"><h3>💻 Web Development</h3><p>Membangun website modern menggunakan HTML, CSS, dan JavaScript.</p></div>
       <div class="focus-card"><h3>🌐 Networking</h3><p>Belajar Mikrotik, Linux, Cisco, dan administrasi jaringan komputer.</p></div>
@@ -216,7 +217,6 @@
   </div>
 </section>
 
-<!-- TARO INI TEPAT DI BAWAH SECTION DI ATAS (SEBELUM TAG </body>) -->
 <div id="detailModal" class="modal-overlay">
   <div class="modal-box">
     <div class="modal-header">
@@ -224,26 +224,25 @@
       <button class="btn-close" onclick="closeModal()">[X] CLOSE</button>
     </div>
     <div class="modal-body" id="modalBody">
-      <!-- Isi detail akan otomatis masuk di sini dari script.js -->
+      <!-- Isi detail masuk otomatis lewat script.js -->
     </div>
   </div>
 </div>
-
 
 <div class="angle-divider"></div>
 
 <section id="console">
   <div class="eyebrow">04 — CONSOLE</div>
   <h2 style="font-size:2rem;margin-bottom:10px;">Try It Yourself</h2>
-<p style="color:var(--muted);margin-bottom:20px;font-size:.95rem;">
-  Terminal ini beneran bisa diketik. Ketik <code>help</code> atau <code>debian</code> buat mulai — atau tekan <code>/</code> di mana aja buat langsung fokus ke sini.
-</p>
-<div class="cmd-chips">
-  <span onclick="runQuickCmd('debian')">⚡ debian</span>
-  <span onclick="runQuickCmd('skills')">💻 skills</span>
-  <span onclick="runQuickCmd('neofetch')">📊 neofetch</span>
-  <span onclick="runQuickCmd('clear')">🧹 clear</span>
-</div>
+  <p style="color:var(--muted);margin-bottom:20px;font-size:.95rem;">
+    Terminal ini beneran bisa diketik. Ketik <code>help</code> atau <code>debian</code> buat mulai — atau tekan <code>/</code> di mana aja buat langsung fokus ke sini.
+  </p>
+  <div class="cmd-chips">
+    <span onclick="runQuickCmd('debian')">⚡ debian</span>
+    <span onclick="runQuickCmd('skills')">💻 skills</span>
+    <span onclick="runQuickCmd('neofetch')">📊 neofetch</span>
+    <span onclick="runQuickCmd('clear')">🧹 clear</span>
+  </div>
   <div class="cli-box" data-reveal>
     <div class="terminal-topbar">
       <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
@@ -318,7 +317,7 @@
 
 <div class="hazard-banner">
   <div class="hazard-track">
-    <span>U</span>PELAN-PELAN<span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
+    <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP JALAN</span><span>★</span>
     <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP BERJALAN</span><span>★</span>
     <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP BERJALAN</span><span>★</span>
     <span>PELAN-PELAN</span><span>★</span><span>ASAL TETEP BERJALAN</span><span>★</span>
@@ -351,6 +350,11 @@
 </div>
 
 <script src="script.js"></script>
+
+<!-- Cloudflare Web Analytics -->
+<script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "c8a304ed93084cdeb71c3d939f95e61d"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
 <script>
   // Fallback: paksa hilangin preloader kalau script.js gagal/error/hang
   window.addEventListener('load', function () {
