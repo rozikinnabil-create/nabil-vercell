@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (i < bootLines.length) {
             const line = document.createElement('div');
             line.textContent = bootLines[i];
-            preloaderLog.appendChild(line);
+            if (preloaderLog) preloaderLog.appendChild(line);
             if (preloaderFill) preloaderFill.style.width = ((i + 1) / bootLines.length * 100) + '%';
             i++;
             setTimeout(typeNextLine, 280);
@@ -162,22 +162,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) {
           const statEl = entry.target;
           const numEl = statEl.querySelector('b');
-          const target = parseInt(numEl.getAttribute('data-count'), 10);
-          const suffix = numEl.getAttribute('data-suffix') || '';
-          let current = 0;
-          const duration = 1000;
-          const stepTime = 16;
-          const steps = duration / stepTime;
-          const increment = target / steps;
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-              current = target;
-              clearInterval(timer);
-              statEl.classList.add('counted');
-            }
-            numEl.textContent = Math.floor(current) + suffix;
-          }, stepTime);
+          if (numEl) {
+            const target = parseInt(numEl.getAttribute('data-count'), 10);
+            const suffix = numEl.getAttribute('data-suffix') || '';
+            let current = 0;
+            const duration = 1000;
+            const stepTime = 16;
+            const steps = duration / stepTime;
+            const increment = target / steps;
+            const timer = setInterval(() => {
+              current += increment;
+              if (current >= target) {
+                current = target;
+                clearInterval(timer);
+                statEl.classList.add('counted');
+              }
+              numEl.textContent = Math.floor(current) + suffix;
+            }, stepTime);
+          }
           countIO.unobserve(statEl);
         }
       });
@@ -306,8 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let commandHistory = [];
       let historyIndex = -1;
-
-            let currentMode = 'normal'; // Menyimpan state mode terminal saat ini
+      let currentMode = 'normal';
 
       const commands = {
         help: () => {
@@ -337,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ];
         },
         debian: () => {
-          cliOutput.innerHTML = ''; // Membersihkan layar terminal agar bersih total ala nano
+          cliOutput.innerHTML = '';
           currentMode = 'debian-view';
           return [
             '=== [ MODE: DEBIAN CHEATSHEET ] ===',
@@ -449,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ];
         },
         debbew: () => {
-          cliOutput.innerHTML = ''; // Bersihkan layar terminal
+          cliOutput.innerHTML = '';
           currentMode = 'debbew-view';
           return [
             '=== [ MODE: DEBBEW OWNCLOUD SCRIPT ] ===',
@@ -635,8 +636,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ]
       };
 
-
       cliInput.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') {
+          playMechanicalClick();
+        }
         if (e.key === 'Tab') {
           e.preventDefault();
           const val = cliInput.value.trim();
@@ -659,6 +662,10 @@ document.addEventListener('DOMContentLoaded', () => {
             historyIndex = -1;
             cliInput.value = '';
           }
+        }
+        if (e.key === 'Enter') {
+          runCommand(cliInput.value);
+          cliInput.value = '';
         }
       });
 
@@ -686,7 +693,8 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           if (key === 'sudo hire-me') {
             setTimeout(() => {
-              document.getElementById('contact').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+              const contactEl = document.getElementById('contact');
+              if (contactEl) contactEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
             }, 900);
           }
         } else {
@@ -695,18 +703,13 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       printLine('NBRZM.KINN interactive console — type "help" to start.');
-      cliInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          runCommand(cliInput.value);
-          cliInput.value = '';
-        }
-      });
       cliOutput.addEventListener('click', () => cliInput.focus());
 
       window.addEventListener('keydown', (e) => {
         if (e.key === '/' && document.activeElement !== cliInput) {
           e.preventDefault();
-          document.getElementById('console').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+          const consoleEl = document.getElementById('console');
+          if (consoleEl) consoleEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
           setTimeout(() => cliInput.focus(), reduceMotion ? 0 : 400);
         }
       });
@@ -728,7 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setInterval(updateClock, 1000);
     }
 
-    // ---- Activity heatmap (GitHub-style) ----
+    // ---- Activity heatmap ----
     const heatmapGrid = document.getElementById('heatmapGrid');
     if (heatmapGrid) {
       const weeks = 26;
@@ -762,7 +765,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // ---- Spotlight grid follows cursor in hero ----
+    // ---- Spotlight grid ----
     const spotlightGrid = document.getElementById('spotlightGrid');
     const heroEl = document.getElementById('home');
     if (spotlightGrid && heroEl && matchMedia('(hover:hover)').matches) {
@@ -791,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { label: 'Go to Testimonials', hint: 'section', action: () => scrollToId('testimonials') },
         { label: 'Go to Certificates', hint: 'section', action: () => scrollToId('certificates') },
         { label: 'Go to Contact', hint: 'section', action: () => scrollToId('contact') },
-        { label: 'Toggle Theme', hint: 'action', action: () => { if (themeToggle) themeToggle.click(); } },
+        { label: 'Toggle Theme', hint: 'action', action: () => { const t = document.getElementById('themeToggle'); if (t) t.click(); } },
         { label: 'Open WhatsApp', hint: 'link', action: () => window.open('https://wa.me/6288210670848', '_blank') },
         { label: 'Open Instagram', hint: 'link', action: () => window.open('https://instagram.com/nblrzknm._', '_blank') },
         { label: 'Copy WhatsApp Number', hint: 'copy', action: () => navigator.clipboard && navigator.clipboard.writeText('+62 882-1067-0848') }
@@ -873,6 +876,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // Inisialisasi Counter
+    initVisitCounter();
+
   } catch (err) {
     console.error('NBRZM script error:', err);
     const pl = document.getElementById('preloader');
@@ -909,15 +915,6 @@ const playMechanicalClick = () => {
     osc.stop(ctx.currentTime + 0.03);
   } catch (e) {}
 };
-
-const cliInputGlobal = document.getElementById('cliInput');
-if (cliInputGlobal) {
-  cliInputGlobal.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter') {
-      playMechanicalClick();
-    }
-  });
-}
 
 function runQuickCmd(cmd) {
   const input = document.getElementById('cliInput');
@@ -963,7 +960,7 @@ function toggleBgm() {
     bgmAudio.play().then(() => {
       isPlaying = true;
       updateBgmUI();
-    }).catch((err) => {
+    }).catch(() => {
       currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
       bgmAudio.src = playlist[currentTrackIndex].url;
       bgmAudio.play().then(() => {
@@ -1000,7 +997,8 @@ function initVisitCounter() {
     })
     .catch(error => console.log("Gagal memuat counter:", error));
 }
-// DATA ISI HALAMAN DETAIL
+
+// DATA ISI HALAMAN DETAIL (MODAL)
 const modalData = {
     about: {
         title: "🙋‍♂️ ABOUT ME",
@@ -1015,7 +1013,7 @@ const modalData = {
             </ul>
             <br>
             <h4>📌 PENGALAMAN & AKTIVITAS</h4>
-            <p>Aktif mengerjakan projek simulasi jaringan jaringan skala lokal (LAN/WAN) serta mengembangkan aplikasi web berbasis Laravel untuk kebutuhan manajemen sistem.</p>
+            <p>Aktif mengerjakan projek simulasi jaringan skala lokal (LAN/WAN) serta mengembangkan aplikasi web berbasis Laravel untuk kebutuhan manajemen sistem.</p>
         `
     },
     dream: {
@@ -1060,7 +1058,7 @@ function openModal(type) {
     const titleEl = document.getElementById('modalTitle');
     const bodyEl = document.getElementById('modalBody');
 
-    if (modalData[type]) {
+    if (modal && modalData[type]) {
         titleEl.innerHTML = modalData[type].title;
         bodyEl.innerHTML = modalData[type].content;
         modal.classList.add('active');
@@ -1070,7 +1068,7 @@ function openModal(type) {
 // FUNGSI MENUTUP HALAMAN DETAIL
 function closeModal() {
     const modal = document.getElementById('detailModal');
-    modal.classList.remove('active');
+    if (modal) modal.classList.remove('active');
 }
 
 // MENUTUP MODAL JIKA KLIK DI LUAR BOX
@@ -1080,5 +1078,3 @@ window.addEventListener('click', function(event) {
         closeModal();
     }
 });
-
-document.addEventListener('DOMContentLoaded', initVisitCounter);
