@@ -39,14 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // ---- Theme toggle ----
+    // ---- Theme toggle dengan animasi float down ----
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
         const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme-animating', 'true');
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('nbrzm-theme', next);
+
+        setTimeout(() => {
+          document.documentElement.removeAttribute('data-theme-animating');
+        }, 600);
       });
     }
 
@@ -210,10 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return div;
       };
 
-      let commandHistory = [];
-      let historyIndex = -1;
-      let currentMode = 'normal';
-
       const commands = {
         help: () => [
           'Available commands:',
@@ -230,7 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ],
         debian: () => {
           cliOutput.innerHTML = '';
-          currentMode = 'debian-view';
           return [
             '=== [ MODE: DEBIAN CHEATSHEET ] ===',
             '--------------------------------------------------',
