@@ -292,22 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setInterval(updateClock, 1000);
     }
 
-    // ---- Heatmap ----
-    const heatmapGrid = document.getElementById('heatmapGrid');
-    if (heatmapGrid) {
-      for (let i = 0; i < 182; i++) {
-        const cell = document.createElement('div');
-        const rand = Math.random();
-        let level = 0;
-        if (rand > 0.85) level = 4;
-        else if (rand > 0.7) level = 3;
-        else if (rand > 0.5) level = 2;
-        else if (rand > 0.3) level = 1;
-        cell.className = `hm-cell hm-${level}`;
-        heatmapGrid.appendChild(cell);
-      }
-    }
-
+    
     // ---- Card Glow Tracker ----
     document.querySelectorAll('.proj-card, .focus-card').forEach(card => {
       card.addEventListener('mousemove', e => {
