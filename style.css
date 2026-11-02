@@ -14,18 +14,15 @@
   
   --primary: #6366f1;
   --primary-hover: #4f46e5;
-  --primary-glow: rgba(99, 102, 241, 0.2);
   --lime: #10b981;
   --hazard: #f59e0b;
   --pink: #ec4899;
   --cyan: #06b6d4;
   
   --terminal-bg: #070a12;
-  --terminal-fg: #10b981;
-  
   --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --glass: rgba(17, 24, 39, 0.75);
+  --glass: rgba(17, 24, 39, 0.85);
   
   --font-display: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -48,7 +45,7 @@ html[data-theme="light"] {
   
   --terminal-bg: #0f172a;
   --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.06);
-  --glass: rgba(255, 255, 255, 0.8);
+  --glass: rgba(255, 255, 255, 0.9);
   
   color-scheme: light;
 }
@@ -107,20 +104,24 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 700; letter-spacing:
 
 .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary); z-index: 200; width: 0%; }
 
-/* Navbar */
+/* Navbar Utama */
 nav {
   position: sticky; top: 0; z-index: 50;
   background: var(--glass); backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 32px;
+  padding: 16px 24px;
 }
 .logo { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; }
 .logo span { color: var(--primary); }
+
 .navlinks { display: none; gap: 28px; font-size: 0.85rem; font-weight: 500; }
 .navlinks a { color: var(--muted); transition: color 0.2s; }
 .navlinks a:hover { color: var(--ink); }
-@media(min-width: 768px) { .navlinks { display: flex; } }
+
+@media(min-width: 768px) {
+  .navlinks { display: flex; }
+}
 
 .nav-right { display: flex; align-items: center; gap: 10px; }
 .cmdk-trigger {
@@ -137,11 +138,48 @@ nav {
 }
 .theme-toggle svg { width: 16px; height: 16px; color: var(--muted); }
 
-.burger { display: block; border: 1px solid var(--border); padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; font-family: var(--font-mono); cursor: pointer; }
-@media(min-width: 768px) { .burger { display: none; } }
+.burger {
+  display: block; border: 1px solid var(--border); padding: 6px 12px;
+  border-radius: 8px; font-size: 0.75rem; font-family: var(--font-mono);
+  background: var(--surface); color: var(--ink); cursor: pointer;
+}
+@media(min-width: 768px) {
+  .burger { display: none; }
+}
 
-#mnav { background: var(--surface); border-bottom: 1px solid var(--border); }
-#mnav a { padding: 12px 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
+/* Menu Seluler / HP Dropdown */
+#mnav {
+  position: sticky;
+  top: 68px;
+  z-index: 49;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: none;
+  flex-direction: column;
+}
+
+#mnav.open {
+  display: flex !important;
+}
+
+#mnav a {
+  padding: 14px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+#mnav a:hover {
+  background: var(--surface-hover);
+  color: var(--primary);
+}
+
+/* Sembunyikan Easter Toast Hacker */
+.easter-toast {
+  display: none !important;
+}
 
 /* Hero */
 .hero { display: grid; grid-template-columns: 1fr; gap: 40px; padding-top: 80px; align-items: center; }
@@ -150,7 +188,9 @@ nav {
 .hero h1 { font-size: clamp(2.2rem, 4.5vw, 3.8rem); font-weight: 800; line-height: 1.15; }
 .hero h1 .hl {
   background: linear-gradient(135deg, var(--primary), var(--pink));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .hero p.lead { font-size: 1rem; color: var(--muted); margin-top: 14px; max-width: 480px; min-height: 3em; }
 
@@ -193,7 +233,12 @@ nav {
 .view-digits span { background: var(--surface); border: 1px solid var(--border); padding: 1px 4px; border-radius: 4px; font-weight: 700; color: var(--primary); }
 
 /* Stats */
-.stats-container { border-y: 1px solid var(--border); margin-top: 60px; background: var(--glass); }
+.stats-container {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-top: 60px;
+  background: var(--glass);
+}
 .stats { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .stat { padding: 24px 16px; text-align: center; border-right: 1px solid var(--border); }
 .stat:last-child { border-right: none; }

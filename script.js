@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('themeToggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
         const next = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('nbrzm-theme', next);
@@ -109,52 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // ---- Custom cursor ----
-    const dot = document.getElementById('cursorDot');
-    const ring = document.getElementById('cursorRing');
-    if (dot && ring && matchMedia('(hover:hover)').matches) {
-      let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
-      window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX; mouseY = e.clientY;
-        dot.style.left = mouseX + 'px';
-        dot.style.top = mouseY + 'px';
-      });
-      function animateRing(){
-        ringX += (mouseX - ringX) * 0.18;
-        ringY += (mouseY - ringY) * 0.18;
-        ring.style.left = ringX + 'px';
-        ring.style.top = ringY + 'px';
-        requestAnimationFrame(animateRing);
-      }
-      animateRing();
-      document.querySelectorAll('a, button, .btn, .proj-card, .testi-card, .cert-card').forEach(el => {
-        el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
-        el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
-      });
-    }
-
-    // ---- Magnetic buttons ----
-    document.querySelectorAll('.magnetic').forEach(btn => {
-      btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = e.clientX - r.left - r.width / 2;
-        const y = e.clientY - r.top - r.height / 2;
-        btn.style.transform = `translate(${x * 0.25}px, ${y * 0.25}px)`;
-      });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0,0)'; });
-    });
-
-    // ---- Tilt effect on project cards ----
-    document.querySelectorAll('.proj-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        card.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 8}deg) translateZ(0)`;
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = 'rotateY(0) rotateX(0)'; });
-    });
-
     // ---- Animated counters ----
     const stats = document.querySelectorAll('.stat');
     const countIO = new IntersectionObserver((entries) => {
@@ -200,39 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: .3 });
     bars.forEach(b => barIO.observe(b));
 
-    // ---- Matrix code rain background ----
-    const matrixCanvas = document.getElementById('matrixCanvas');
-    if (matrixCanvas && !reduceMotion) {
-      const ctx = matrixCanvas.getContext('2d');
-      const chars = 'アイウエオカキクケコサシスセソ0123456789#$%&+-*ESP32MIKROTIK'.split('');
-      let w, h, columns, drops;
-
-      function resizeMatrix() {
-        w = matrixCanvas.width = window.innerWidth;
-        h = matrixCanvas.height = window.innerHeight;
-        columns = Math.floor(w / 18);
-        drops = new Array(columns).fill(1);
-      }
-      resizeMatrix();
-      window.addEventListener('resize', resizeMatrix);
-
-      function drawMatrix() {
-        ctx.fillStyle = 'rgba(0,0,0,0.08)';
-        ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = '#C6FF3D';
-        ctx.font = '16px monospace';
-        for (let i = 0; i < drops.length; i++) {
-          const text = chars[Math.floor(Math.random() * chars.length)];
-          ctx.fillText(text, i * 18, drops[i] * 18);
-          if (drops[i] * 18 > h && Math.random() > 0.975) drops[i] = 0;
-          drops[i]++;
-        }
-      }
-      setInterval(drawMatrix, 50);
-    } else if (matrixCanvas) {
-      matrixCanvas.style.display = 'none';
-    }
-
     // ---- Terminal typing widget ----
     const terminalBody = document.getElementById('terminalBody');
     if (terminalBody) {
@@ -276,23 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
       termIO.observe(terminalBody);
     }
 
-    // ---- Konami code easter egg ----
-    const konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-    let konamiPos = 0;
-    const toast = document.createElement('div');
-    toast.className = 'easter-toast';
-    toast.textContent = '⚡ HACKER MODE UNLOCKED — NBRZM.SYS SALUTES YOU';
-    document.body.appendChild(toast);
-    window.addEventListener('keydown', (e) => {
-      konamiPos = (e.key === konamiSeq[konamiPos]) ? konamiPos + 1 : 0;
-      if (konamiPos === konamiSeq.length) {
-        konamiPos = 0;
-        toast.classList.add('show');
-        document.documentElement.style.setProperty('--lime', '#39FF14');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-      }
-    });
-
     // ---- Interactive console (CLI) ----
     const cliOutput = document.getElementById('cliOutput');
     const cliInput = document.getElementById('cliInput');
@@ -321,8 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
             '  debian      - ubuntu/debian server cheatsheet',
             '  debbew      - owncloud docker & aapanel script',
             '  ping <host> - test network latency',
-            '  matrix      - toggle fullscreen matrix hacker mode',
-            '  scan <ip>   - simulate port scanner with progress bar',
+            '  scan <ip>   - simulate port scanner',
             '  whoami      - who am I',
             '  about       - short bio',
             '  skills      - list my skills',
@@ -331,8 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
             '  neofetch    - system info flex',
             '  ipinfo      - check public IP & network info',
             '  nmap <ip>   - simulate network port scanner',
-            '  decrypt     - decrypt secret message',
-            '  sudo hire-me',
             '  exit        - exit current view / mode',
             '  clear       - clear the screen'
           ];
@@ -342,176 +243,11 @@ document.addEventListener('DOMContentLoaded', () => {
           currentMode = 'debian-view';
           return [
             '=== [ MODE: DEBIAN CHEATSHEET ] ===',
-            'Ketik "exit" untuk keluar dari mode ini dan kembali ke menu utama.',
-            '--------------------------------------------------',
-            '=== UPDATE UBUNTU ===',
-            'sudo apt update, sudo apt upgrade -y',
-            '',
-            '=== BERPINDAH ROOT ===',
-            '- su -',
-            '',
-            '=== LIHAT DAFTAR REPOSITORY ===',
-            '- sudo nano /etc/apt/sources.list',
-            '',
-            '=== ISI REPOSITORY ===',
-            'deb http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse',
-            'deb http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse',
-            'deb http://archive.ubuntu.com/ubuntu jammy-security main restricted universe multiverse',
-            '',
-            '=== INSTALL DOCKER / DOCKER COMPOSE ===',
-            '- sudo apt install docker.io -y',
-            '- sudo apt install docker-compose -y',
-            '- sudo systemctl enable --now docker',
-            '- docker -v',
-            '- docker-compose -v',
-            '',
-            '=== MEMBUAT FOLDER OWNCLOUD ===',
-            '- mkdir ~/owncloud-docker',
-            '- cd ~/owncloud-docker',
-            '- nano docker-compose.yaml',
-            '',
-            '=== ISI DOCKER-COMPOSE.YAML ===',
-            "version: '3'",
-            '',
-            'services:',
-            '  owncloud:',
-            '    image: owncloud/server:10.13',
-            '    container_name: owncloud',
-            '    restart: always',
-            '    ports:',
-            '      - "8080:8080"',
-            '    depends_on:',
-            '      - db',
-            '    environment:',
-            '      - OWNCLOUD_DB_TYPE=mysql',
-            '      - OWNCLOUD_DB_NAME=owncloud',
-            '      - OWNCLOUD_DB_USERNAME=owncloud',
-            '      - OWNCLOUD_DB_PASSWORD=owncloud',
-            '      - OWNCLOUD_DB_HOST=db',
-            '      - OWNCLOUD_ADMIN_USERNAME=admin',
-            '      - OWNCLOUD_ADMIN_PASSWORD=admin',
-            '      - OWNCLOUD_DOMAIN=(isi ip)',
-            '    volumes:',
-            '      - owncloud_files:/mnt/data',
-            '',
-            '  db:',
-            '    image: mariadb:10.6',
-            '    container_name: owncloud_db',
-            '    restart: always',
-            '    environment:',
-            '      - MYSQL_ROOT_PASSWORD=secret',
-            '      - MYSQL_USER=owncloud',
-            '      - MYSQL_PASSWORD=owncloud',
-            '      - MYSQL_DATABASE=owncloud',
-            '    volumes:',
-            '      - db_data:/var/lib/mysql',
-            '',
-            'volumes:',
-            '  owncloud_files:',
-            '  db_data:',
-            '',
-            '=== MENJALANKAN OWNCLOUD ===',
-            '- sudo docker-compose up -d',
-            '',
-            '=== MENGECEK CONTAINER ===',
-            '- docker ps',
-            '',
-            '=== MELIHAT SEMUA CONTAINER ===',
-            '- docker ps -a',
-            '',
-            '=== MENGHENTIKAN CONTAINER ===',
-            '- docker-compose down',
-            '',
-            '=== MENGHAPUS SEMUA CONTAINER & VOLUME ===',
-            '- sudo docker-compose down -v',
-            '',
-            '=== AA PANEL ===',
-            'Install wget & curl:',
-            '- sudo apt install -y wget curl',
-            '',
-            'Download installer:',
-            '- wget -O install.sh http://www.aapanel.com/script/install-ubuntu_6.0_en.sh',
-            '',
-            'Install aapanel:',
-            '- sudo bash install.sh',
-            '',
-            'Membuka firewall:',
-            '- sudo ufw allow (isi nomor yang kuning)',
-            '- sudo ufw reload',
-            '',
-            'Perintah aapanel:',
-            '- sudo bt 9',
-            '- sudo bt 14',
-            '- bt default',
-            '- sudo bt 5',
-            '',
-            'Menampilkan/mengubah password panel:',
-            '- sudo bt 6'
-          ];
-        },
-        debbew: () => {
-          cliOutput.innerHTML = '';
-          currentMode = 'debbew-view';
-          return [
-            '=== [ MODE: DEBBEW OWNCLOUD SCRIPT ] ===',
             'Ketik "exit" untuk keluar dari mode ini.',
             '--------------------------------------------------',
-            "version: '3'",
-            '',
-            'services:',
-            '  mariadb:',
-            '    image: mariadb:10.6',
-            '    container_name: owncloud-db',
-            '    restart: always',
-            '    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW',
-            '    environment:',
-            '      MYSQL_ROOT_PASSWORD: root123',
-            '      MYSQL_DATABASE: owncloud',
-            '      MYSQL_USER: owncloud',
-            '      MYSQL_PASSWORD: owncloud123',
-            '    volumes:',
-            '      - mysql:/var/lib/mysql',
-            '',
-            '  redis:',
-            '    image: redis:alpine',
-            '    container_name: owncloud-redis',
-            '    restart: always',
-            '',
-            '  owncloud:',
-            '    image: owncloud/server:latest',
-            '    container_name: owncloud',
-            '    restart: always',
-            '    ports:',
-            '      - "8080:8080"',
-            '    depends_on:',
-            '      - mariadb',
-            '      - redis',
-            '    environment:',
-            '      OWNCLOUD_DOMAIN: 10.209.25.250:8080',
-            '      OWNCLOUD_DB_TYPE: mysql',
-            '      OWNCLOUD_DB_NAME: owncloud',
-            '      OWNCLOUD_DB_USERNAME: owncloud',
-            '      OWNCLOUD_DB_PASSWORD: owncloud123',
-            '      OWNCLOUD_DB_HOST: mariadb',
-            '      OWNCLOUD_ADMIN_USERNAME: admin',
-            '      OWNCLOUD_ADMIN_PASSWORD: admin123',
-            '      OWNCLOUD_REDIS_ENABLED: "true"',
-            '      OWNCLOUD_REDIS_HOST: redis',
-            '    volumes:',
-            '      - files:/mnt/data',
-            '',
-            'volumes:',
-            '  files:',
-            '  mysql:',
-            '',
-            '=== SKRIP INSTALASI AAPANEL ===',
-            'URL=https://www.aapanel.com/script/install_7.0_en.sh',
-            'if [ -f /usr/bin/curl ]; then',
-            '    curl -ksSO "$URL"',
-            'else',
-            '    wget --no-check-certificate -O install_7.0_en.sh "$URL"',
-            'fi',
-            'bash install_7.0_en.sh aapanel'
+            'sudo apt update && sudo apt upgrade -y',
+            'sudo apt install docker.io docker-compose -y',
+            'sudo systemctl enable --now docker'
           ];
         },
         exit: () => {
@@ -520,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           currentMode = 'normal';
           cliOutput.innerHTML = '';
-          return ['Keluar dari direktori. Kembali ke terminal utama NBRZM.KINN. Ketik "help" untuk daftar perintah.'];
+          return ['Keluar dari direktori. Kembali ke terminal utama.'];
         },
         ping: (args) => {
           const target = args || 'google.com';
@@ -528,44 +264,14 @@ document.addEventListener('DOMContentLoaded', () => {
           return [
             `PING ${target} (142.250.190.46) 56(84) bytes of data.`,
             `64 bytes from ${target}: icmp_seq=1 ttl=117 time=${time} ms`,
-            `64 bytes from ${target}: icmp_seq=2 ttl=117 time=${(parseFloat(time) + 2.3).toFixed(1)} ms`,
             `--- ${target} ping statistics ---`,
-            '2 packets transmitted, 2 received, 0% packet loss, time 1002ms'
-          ];
-        },
-        matrix: () => {
-          document.body.classList.toggle('matrix-mode');
-          const active = document.body.classList.contains('matrix-mode');
-          return active 
-            ? ['[+] FULLSCREEN MATRIX HACKER MODE ACTIVATED! Type "matrix" again to exit.'] 
-            : ['[-] Matrix mode deactivated.'];
-        },
-        scan: async (args) => {
-          const target = args || '192.168.1.1';
-          printLine(`Initiating SYN stealth scan on target: ${target}`);
-          const line = printLine('Scanning ports: [                    ] 0%');
-          
-          for (let p = 1; p <= 10; p++) {
-            await new Promise(r => setTimeout(r, 150));
-            const pct = p * 10;
-            const filled = '#'.repeat(p);
-            const empty = ' '.repeat(10 - p);
-            line.textContent = `Scanning ports: [${filled}${empty}] ${pct}%`;
-          }
-          return [
-            `Scan completed successfully on ${target}`,
-            `PORT     STATE SERVICE`,
-            `22/tcp   open  ssh`,
-            `80/tcp   open  http`,
-            `443/tcp  open  https`,
-            `8080/tcp open  http-proxy`
+            '1 packets transmitted, 1 received, 0% packet loss'
           ];
         },
         whoami: () => ['nabil_rozikin_maulana'],
         about: () => [
           'Siswa Teknik Komputer dan Jaringan (TKJ).',
-          'Fokus: Web Development, Networking, Cyber Security, IoT.',
-          'Belajar sambil bikin project yang beneran jalan.'
+          'Fokus: Web Development, Networking, Cyber Security, IoT.'
         ],
         skills: () => [
           'HTML          [##########] 90%',
@@ -577,8 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         projects: () => [
           '1. Personal Portfolio  — HTML/CSS/JS',
           '2. Robot Pathfinder    — ESP32 line follower',
-          '3. IoT Monitoring      — ESP32 remote monitoring',
-          'Scroll up to #projects for links.'
+          '3. IoT Monitoring      — ESP32 remote monitoring'
         ],
         contact: () => [
           'Instagram : instagram.com/nblrzknm._',
@@ -586,60 +291,30 @@ document.addEventListener('DOMContentLoaded', () => {
           'Telegram  : t.me/apalaabing'
         ],
         neofetch: () => [
-          '        /\\        guest@nbrzm',
-          '       /  \\       -------------',
-          '      / /\\ \\      OS: NBRZM.KINN v1.0',
-          '     / ____ \\     Host: TKJ Student',
-          '    /_/    \\_\\    Shell: nbrzm-cli',
-          '                  Uptime: since 2024',
-          '                  Stack: HTML, CSS, JS',
-          '                  Focus: Web / Network / IoT'
-        ],
-        'sudo hire-me': () => [
-          '[sudo] password for guest: ********',
-          'Permission granted.',
-          'Redirecting to #contact in 3... 2... 1...'
+          'guest@nbrzm',
+          '------------',
+          'OS: NBRZM.KINN v1.0',
+          'Host: TKJ Student',
+          'Stack: HTML, CSS, JS',
+          'Focus: Web / Network / IoT'
         ],
         ipinfo: async () => {
           try {
             const response = await fetch('https://ipapi.co/json/');
             const data = await response.json();
             return [
-              '=== FETCHING NETWORK CONFIGURATION ===',
               `IP Address  : ${data.ip}`,
               `ISP / Org   : ${data.org}`,
               `City        : ${data.city}`,
-              `Country     : ${data.country_name}`,
-              'Status      : Connection Secure [OK]'
+              `Country     : ${data.country_name}`
             ];
           } catch (error) {
             return ['Error: Gagal mengambil data jaringan.'];
           }
-        },
-        nmap: (args) => {
-          const target = args || '127.0.0.1';
-          return [
-            `Starting Nmap scan for target: ${target}`,
-            `Host is up (0.00034s latency).`,
-            `PORT     STATE SERVICE`,
-            `21/tcp   closed ftp`,
-            `22/tcp   open   ssh`,
-            `80/tcp   open   http`,
-            `8080/tcp open   http-proxy`,
-            `Nmap done: 1 IP address scanned.`
-          ];
-        },
-        decrypt: () => [
-          '[RNG_INIT] Memulai dekripsi SHA-256...',
-          '[>] Bypass firewall lapis ke-3 berhasil...',
-          'ACCESS GRANTED: Semangat terus ngoprek jaringan & kodenya!'
-        ]
+        }
       };
 
       cliInput.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter') {
-          playMechanicalClick();
-        }
         if (e.key === 'Tab') {
           e.preventDefault();
           const val = cliInput.value.trim();
@@ -691,28 +366,13 @@ document.addEventListener('DOMContentLoaded', () => {
           if (Array.isArray(output)) {
             output.forEach(line => printLine(line));
           }
-          if (key === 'sudo hire-me') {
-            setTimeout(() => {
-              const contactEl = document.getElementById('contact');
-              if (contactEl) contactEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-            }, 900);
-          }
         } else {
           printLine(`command not found: ${fullCmd} — type "help"`, 'cli-line-err');
         }
       };
 
-      printLine('NBRZM.KINN interactive console — type "help" to start.');
+      printLine('NBRZM.KINN console — type "help" to start.');
       cliOutput.addEventListener('click', () => cliInput.focus());
-
-      window.addEventListener('keydown', (e) => {
-        if (e.key === '/' && document.activeElement !== cliInput) {
-          e.preventDefault();
-          const consoleEl = document.getElementById('console');
-          if (consoleEl) consoleEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-          setTimeout(() => cliInput.focus(), reduceMotion ? 0 : 400);
-        }
-      });
     }
 
     // ---- Live system clock + uptime ----
@@ -737,13 +397,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const weeks = 26;
       const totalDays = weeks * 7;
       const today = new Date();
-      const tooltip = document.createElement('div');
-      tooltip.className = 'hm-tooltip';
-      document.body.appendChild(tooltip);
 
       for (let i = totalDays - 1; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
         const cell = document.createElement('div');
         const rand = Math.random();
         let level = 0;
@@ -752,30 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (rand > 0.5) level = 2;
         else if (rand > 0.3) level = 1;
         cell.className = `hm-cell hm-${level}`;
-        const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-        const commitWord = level === 0 ? 'no activity' : `${level * 2} contributions`;
-        cell.addEventListener('mousemove', (e) => {
-          tooltip.textContent = `${commitWord} on ${dateStr}`;
-          tooltip.style.left = e.clientX + 14 + 'px';
-          tooltip.style.top = e.clientY + 14 + 'px';
-          tooltip.classList.add('show');
-        });
-        cell.addEventListener('mouseleave', () => tooltip.classList.remove('show'));
         heatmapGrid.appendChild(cell);
       }
-    }
-
-    // ---- Spotlight grid ----
-    const spotlightGrid = document.getElementById('spotlightGrid');
-    const heroEl = document.getElementById('home');
-    if (spotlightGrid && heroEl && matchMedia('(hover:hover)').matches) {
-      heroEl.addEventListener('mousemove', (e) => {
-        const r = heroEl.getBoundingClientRect();
-        const mx = ((e.clientX - r.left) / r.width) * 100;
-        const my = ((e.clientY - r.top) / r.height) * 100;
-        spotlightGrid.style.setProperty('--mx', mx + '%');
-        spotlightGrid.style.setProperty('--my', my + '%');
-      });
     }
 
     // ---- Command palette (Ctrl/Cmd+K) ----
@@ -796,8 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { label: 'Go to Contact', hint: 'section', action: () => scrollToId('contact') },
         { label: 'Toggle Theme', hint: 'action', action: () => { const t = document.getElementById('themeToggle'); if (t) t.click(); } },
         { label: 'Open WhatsApp', hint: 'link', action: () => window.open('https://wa.me/6288210670848', '_blank') },
-        { label: 'Open Instagram', hint: 'link', action: () => window.open('https://instagram.com/nblrzknm._', '_blank') },
-        { label: 'Copy WhatsApp Number', hint: 'copy', action: () => navigator.clipboard && navigator.clipboard.writeText('+62 882-1067-0848') }
+        { label: 'Open Instagram', hint: 'link', action: () => window.open('https://instagram.com/nblrzknm._', '_blank') }
       ];
 
       function scrollToId(id) {
@@ -876,7 +508,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Inisialisasi Counter
     initVisitCounter();
 
   } catch (err) {
@@ -886,43 +517,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// SIMULASI PING REALTIME
-setInterval(() => {
-  const pingElement = document.getElementById('pingDisplay');
-  if (pingElement) {
-    const randomPing = Math.floor(Math.random() * (28 - 12 + 1)) + 12;
-    pingElement.textContent = `PING: ${randomPing}ms`;
-  }
-}, 2000);
-
-// MECHANICAL KEYBOARD AUDIO SFX
-const playMechanicalClick = () => {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(180 + Math.random() * 80, ctx.currentTime);
-    
-    gain.gain.setValueAtTime(0.04, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.03);
-    
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    
-    osc.start();
-    osc.stop(ctx.currentTime + 0.03);
-  } catch (e) {}
-};
-
 function runQuickCmd(cmd) {
   const input = document.getElementById('cliInput');
   if (input) {
     input.value = cmd;
     const event = new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 });
     input.dispatchEvent(event);
-    playMechanicalClick();
   }
 }
 
@@ -942,11 +542,9 @@ function updateBgmUI() {
   if (!bgmBtn) return;
 
   if (isPlaying) {
-    bgmBtn.innerHTML = `<span class="bgm-wave">📊</span> ON: ${playlist[currentTrackIndex].title}`;
-    bgmBtn.classList.add('bgm-active');
+    bgmBtn.innerHTML = `📊 ON: ${playlist[currentTrackIndex].title}`;
   } else {
     bgmBtn.innerHTML = `🎵 BGM: OFF`;
-    bgmBtn.classList.remove('bgm-active');
   }
 }
 
@@ -970,15 +568,6 @@ function toggleBgm() {
     });
   }
 }
-
-bgmAudio.addEventListener('ended', () => {
-  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-  bgmAudio.src = playlist[currentTrackIndex].url;
-  bgmAudio.play().then(() => {
-    isPlaying = true;
-    updateBgmUI();
-  });
-});
 
 // GLOBAL VISIT COUNTER
 function initVisitCounter() {
@@ -1008,12 +597,9 @@ const modalData = {
             <h4>⚡ SKILLS & KEAHLIAN</h4>
             <ul>
                 <li><b>Computer Networking:</b> TCP/IP, Subnetting IPv4, Cisco Packet Tracer, Routing Static & Dynamic (RIP/OSPF), MikroTik.</li>
-                <li><b>Web Development:</b> HTML5, CSS3, JavaScript, PHP, Laravel Framework, Blade Templating Engine.</li>
+                <li><b>Web Development:</b> HTML5, CSS3, JavaScript, PHP, Laravel Framework.</li>
                 <li><b>System Administration:</b> Linux/Debian Server Configuration, Web Server (Apache/Nginx), SSH, FTP.</li>
             </ul>
-            <br>
-            <h4>📌 PENGALAMAN & AKTIVITAS</h4>
-            <p>Aktif mengerjakan projek simulasi jaringan skala lokal (LAN/WAN) serta mengembangkan aplikasi web berbasis Laravel untuk kebutuhan manajemen sistem.</p>
         `
     },
     dream: {
@@ -1024,14 +610,7 @@ const modalData = {
             <h4>🎯 TARGET JANGKA PENDEK</h4>
             <ul>
                 <li>Mendapatkan sertifikasi industri IT internasional (seperti CCNA atau MTCNA).</li>
-                <li>Menguasai arsitektur *Full-Stack Web Development* berbasis Laravel dan sistem RESTful API.</li>
-                <li>Menyelesaikan program Praktik Kerja Lapangan (PKL) dengan hasil dan kontribusi terbaik.</li>
-            </ul>
-            <br>
-            <h4>🌟 TARGET JANGKA PANJANG</h4>
-            <ul>
-                <li>Menjadi Network Engineer / Cloud Infrastructure Lead di perusahaan teknologi terkemuka.</li>
-                <li>Membangun platform software dan otomasi jaringan modern untuk efisiensi bisnis.</li>
+                <li>Menguasai arsitektur Full-Stack Web Development berbasis Laravel dan sistem RESTful API.</li>
             </ul>
         `
     },
@@ -1040,19 +619,15 @@ const modalData = {
         content: `
             <p>Berikut adalah beberapa projek utama yang telah saya kembangkan:</p>
             <br>
-            <h4>1. Interactive Cyberpunk Portfolio Web</h4>
-            <p>Website portofolio pribadi bertema <i>Neo-Brutalism</i> dilengkapi dengan fitur CLI terminal interaktif, widget ping real-time, dan pemutar musik BGM.</p>
+            <h4>1. Interactive Portfolio Web</h4>
+            <p>Website portofolio pribadi dilengkapi dengan fitur CLI terminal interaktif, widget ping real-time, dan pemutar musik BGM.</p>
             <br>
             <h4>2. Perancangan & Routing Jaringan Cisco</h4>
             <p>Simulasi arsitektur jaringan multi-router menggunakan Cisco Packet Tracer dengan implementasi DHCP Server, OSPF Routing, dan VLAN Segmentation.</p>
-            <br>
-            <h4>3. Aplikasi Web Manajemen Data (Laravel)</h4>
-            <p>Sistem informasi berbasis Laravel Eloquent ORM dengan dukungan otentikasi login, operasi CRUD lengkap, dan manajemen basis data MySQL.</p>
         `
     }
 };
 
-// FUNGSI MEMBUKA HALAMAN DETAIL
 function openModal(type) {
     const modal = document.getElementById('detailModal');
     const titleEl = document.getElementById('modalTitle');
@@ -1065,13 +640,11 @@ function openModal(type) {
     }
 }
 
-// FUNGSI MENUTUP HALAMAN DETAIL
 function closeModal() {
     const modal = document.getElementById('detailModal');
     if (modal) modal.classList.remove('active');
 }
 
-// MENUTUP MODAL JIKA KLIK DI LUAR BOX
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('detailModal');
     if (event.target === modal) {
