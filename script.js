@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contact: () => [
           'Instagram : instagram.com/nblrzknm._',
           'WhatsApp  : wa.me/6288210670848',
-          'Telegram  : t.me/apalaabing'
+          'Email     : nabilrozikin@gmail.com'
         ],
         neofetch: () => [
           'guest@nbrzm',
