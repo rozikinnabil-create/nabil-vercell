@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mnav.classList.remove('open')));
     }
 
-    // ---- Scroll reveal with stagger ----
+    // ---- Scroll reveal ----
     const items = document.querySelectorAll('[data-reveal]');
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e, idx) => {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (progressBar) progressBar.style.width = scrolled + '%';
     });
 
-    // ---- Scroll-to-top button ----
+    // ---- Scroll to top ----
     const scrollTopBtn = document.getElementById('scrollTop');
     if (scrollTopBtn) {
       window.addEventListener('scroll', () => {
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // ---- Typewriter effect on hero lead paragraph ----
+    // ---- Typewriter ----
     const typedLead = document.getElementById('typedLead');
     const leadText = "Nabil Rozikin Maulana — siswa Teknik Komputer dan Jaringan yang bikin website, ngoprek Mikrotik, dan merakit robot ESP32. Belajar sambil bikin project yang beneran jalan.";
     if (typedLead) {
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
       termIO.observe(terminalBody);
     }
 
-    // ---- Interactive console (CLI) ----
+    // ---- CLI Console ----
     const cliOutput = document.getElementById('cliOutput');
     const cliInput = document.getElementById('cliInput');
     if (cliOutput && cliInput) {
@@ -215,187 +215,86 @@ document.addEventListener('DOMContentLoaded', () => {
       let currentMode = 'normal';
 
       const commands = {
-        help: () => {
-          if (currentMode !== 'normal') {
-            return ['Anda sedang berada di dalam sub-menu cheatsheet.', 'Ketik "exit" untuk keluar dan kembali ke menu utama.'];
-          }
-          return [
-            'Available commands:',
-            '  help        - show this list',
-            '  debian      - ubuntu/debian server cheatsheet',
-            '  ping <host> - test network latency',
-            '  scan <ip>   - simulate port scanner',
-            '  whoami      - who am I',
-            '  about       - short bio',
-            '  skills      - list my skills',
-            '  projects    - list my projects',
-            '  contact     - how to reach me',
-            '  neofetch    - system info flex',
-            '  ipinfo      - check public IP & network info',
-            '  exit        - exit current view / mode',
-            '  clear       - clear the screen'
-          ];
-        },
+        help: () => [
+          'Available commands:',
+          '  help        - show this list',
+          '  debian      - ubuntu/debian server cheatsheet',
+          '  ping <host> - test network latency',
+          '  whoami      - who am I',
+          '  about       - short bio',
+          '  skills      - list my skills',
+          '  projects    - list my projects',
+          '  contact     - how to reach me',
+          '  neofetch    - system info flex',
+          '  clear       - clear the screen'
+        ],
         debian: () => {
           cliOutput.innerHTML = '';
           currentMode = 'debian-view';
           return [
             '=== [ MODE: DEBIAN CHEATSHEET ] ===',
-            'Ketik "exit" untuk keluar dari mode ini.',
             '--------------------------------------------------',
             'sudo apt update && sudo apt upgrade -y',
             'sudo apt install docker.io docker-compose -y',
             'sudo systemctl enable --now docker'
           ];
         },
-        exit: () => {
-          if (currentMode === 'normal') {
-            return ['Tidak ada sesi aktif untuk ditutup.'];
-          }
-          currentMode = 'normal';
-          cliOutput.innerHTML = '';
-          return ['Keluar dari direktori. Kembali ke terminal utama.'];
-        },
         ping: (args) => {
           const target = args || 'google.com';
           const time = (Math.random() * 20 + 10).toFixed(1);
           return [
             `PING ${target} (142.250.190.46) 56(84) bytes of data.`,
-            `64 bytes from ${target}: icmp_seq=1 ttl=117 time=${time} ms`,
-            `--- ${target} ping statistics ---`,
-            '1 packets transmitted, 1 received, 0% packet loss'
+            `64 bytes from ${target}: icmp_seq=1 ttl=117 time=${time} ms`
           ];
         },
         whoami: () => ['nabil_rozikin_maulana'],
-        about: () => [
-          'Siswa Teknik Komputer dan Jaringan (TKJ).',
-          'Fokus: Web Development, Networking, Cyber Security, IoT.'
-        ],
-        skills: () => [
-          'HTML          [##########] 90%',
-          'CSS           [########  ] 85%',
-          'JavaScript    [########  ] 75%',
-          'Networking    [##########] 90%',
-          'Arduino/ESP32 [########  ] 85%'
-        ],
-        projects: () => [
-          '1. Personal Portfolio  — HTML/CSS/JS',
-          '2. Robot Pathfinder    — ESP32 line follower',
-          '3. IoT Monitoring      — ESP32 remote monitoring'
-        ],
-        contact: () => [
-          'Instagram : instagram.com/nblrzknm._',
-          'WhatsApp  : wa.me/6288210670848',
-          'Email     : nabilrozikin@gmail.com'
-        ],
-        neofetch: () => [
-          'guest@nbrzm',
-          '------------',
-          'OS: NBRZM.KINN v1.0',
-          'Host: TKJ Student',
-          'Stack: HTML, CSS, JS',
-          'Focus: Web / Network / IoT'
-        ],
-        ipinfo: async () => {
-          try {
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
-            return [
-              `IP Address  : ${data.ip}`,
-              `ISP / Org   : ${data.org}`,
-              `City        : ${data.city}`,
-              `Country     : ${data.country_name}`
-            ];
-          } catch (error) {
-            return ['Error: Gagal mengambil data jaringan.'];
-          }
-        }
+        about: () => ['Siswa TKJ, Web Dev, Networking, IoT.'],
+        skills: () => ['HTML 90%, CSS 85%, JS 75%, Networking 90%, Arduino 85%'],
+        projects: () => ['1. Portfolio  2. Pathfinder  3. IoT Monitoring'],
+        contact: () => ['Email: nabilrozikin@gmail.com', 'IG: @nblrzknm._', 'WA: 088210670848'],
+        neofetch: () => ['OS: NBRZM.KINN v1.0', 'Host: TKJ Student', 'Stack: HTML/CSS/JS']
       };
 
       cliInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Tab') {
-          e.preventDefault();
-          const val = cliInput.value.trim();
-          const matched = Object.keys(commands).find(cmd => cmd.startsWith(val));
-          if (matched) cliInput.value = matched;
-        }
-        if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
-            historyIndex++;
-            cliInput.value = commandHistory[commandHistory.length - 1 - historyIndex];
-          }
-        }
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          if (historyIndex > 0) {
-            historyIndex--;
-            cliInput.value = commandHistory[commandHistory.length - 1 - historyIndex];
-          } else if (historyIndex === 0) {
-            historyIndex = -1;
-            cliInput.value = '';
-          }
-        }
         if (e.key === 'Enter') {
-          runCommand(cliInput.value);
+          const raw = cliInput.value.trim();
           cliInput.value = '';
+          if (!raw) return;
+          printLine(raw, 'cli-line-cmd');
+          if (raw.toLowerCase() === 'clear') { cliOutput.innerHTML = ''; return; }
+          const parts = raw.split(' ');
+          const key = parts[0].toLowerCase();
+          const args = parts.slice(1).join(' ');
+          if (commands[key]) {
+            const res = commands[key](args);
+            res.forEach(l => printLine(l));
+          } else {
+            printLine(`command not found: ${raw} — type "help"`, 'cli-line-err');
+          }
         }
       });
-
-      const runCommand = async (raw) => {
-        const fullCmd = raw.trim();
-        if (!fullCmd) return;
-        printLine(fullCmd, 'cli-line-cmd');
-        commandHistory.push(fullCmd);
-        historyIndex = -1;
-
-        if (fullCmd.toLowerCase() === 'clear') {
-          cliOutput.innerHTML = '';
-          return;
-        }
-
-        const parts = fullCmd.split(' ');
-        const key = parts[0].toLowerCase();
-        const args = parts.slice(1).join(' ');
-
-        if (commands[key]) {
-          const res = typeof commands[key] === 'function' ? commands[key](args) : commands[key];
-          const output = res instanceof Promise ? await res : res;
-          if (Array.isArray(output)) {
-            output.forEach(line => printLine(line));
-          }
-        } else {
-          printLine(`command not found: ${fullCmd} — type "help"`, 'cli-line-err');
-        }
-      };
-
       printLine('NBRZM.KINN console — type "help" to start.');
       cliOutput.addEventListener('click', () => cliInput.focus());
     }
 
-    // ---- Live system clock + uptime ----
+    // ---- Clock ----
     const sysClockTime = document.getElementById('sysClockTime');
     const sysUptime = document.getElementById('sysUptime');
     if (sysClockTime && sysUptime) {
       const siteEpoch = new Date('2024-01-01T00:00:00');
       const updateClock = () => {
         const now = new Date();
-        const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-        sysClockTime.textContent = timeStr + ' WIB';
-        const days = Math.floor((now - siteEpoch) / 86400000);
-        sysUptime.textContent = `uptime ${days}d`;
+        sysClockTime.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }) + ' WIB';
+        sysUptime.textContent = `uptime ${Math.floor((now - siteEpoch) / 86400000)}d`;
       };
       updateClock();
       setInterval(updateClock, 1000);
     }
 
-    // ---- Activity heatmap ----
+    // ---- Heatmap ----
     const heatmapGrid = document.getElementById('heatmapGrid');
     if (heatmapGrid) {
-      const weeks = 26;
-      const totalDays = weeks * 7;
-
-      for (let i = totalDays - 1; i >= 0; i--) {
+      for (let i = 0; i < 182; i++) {
         const cell = document.createElement('div');
         const rand = Math.random();
         let level = 0;
@@ -408,128 +307,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // ---- Command palette (Ctrl/Cmd+K) ----
-    const cmdkOverlay = document.getElementById('cmdkOverlay');
-    const cmdkInput = document.getElementById('cmdkInput');
-    const cmdkList = document.getElementById('cmdkList');
-    const cmdkTrigger = document.getElementById('cmdkTrigger');
-    if (cmdkOverlay && cmdkInput && cmdkList) {
-      const paletteCommands = [
-        { label: 'Go to Home', hint: 'section', action: () => scrollToId('home') },
-        { label: 'Go to About', hint: 'section', action: () => scrollToId('about') },
-        { label: 'Go to Skills', hint: 'section', action: () => scrollToId('skills') },
-        { label: 'Go to Projects', hint: 'section', action: () => scrollToId('projects') },
-        { label: 'Go to Console', hint: 'section', action: () => scrollToId('console') },
-        { label: 'Go to Activity', hint: 'section', action: () => scrollToId('activity') },
-        { label: 'Go to Testimonials', hint: 'section', action: () => scrollToId('testimonials') },
-        { label: 'Go to Certificates', hint: 'section', action: () => scrollToId('certificates') },
-        { label: 'Go to Contact', hint: 'section', action: () => scrollToId('contact') },
-        { label: 'Toggle Theme', hint: 'action', action: () => { const t = document.getElementById('themeToggle'); if (t) t.click(); } },
-        { label: 'Open WhatsApp', hint: 'link', action: () => window.open('https://wa.me/6288210670848', '_blank') },
-        { label: 'Open Instagram', hint: 'link', action: () => window.open('https://instagram.com/nblrzknm._', '_blank') }
-      ];
+    // ---- Card Glow Tracker ----
+    document.querySelectorAll('.proj-card, .focus-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    });
 
-      function scrollToId(id) {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-      }
-
-      let filtered = paletteCommands.slice();
-      let activeIndex = 0;
-
-      function renderList() {
-        cmdkList.innerHTML = '';
-        if (filtered.length === 0) {
-          cmdkList.innerHTML = '<div class="cmdk-empty">No matching command</div>';
-          return;
-        }
-        filtered.forEach((cmd, idx) => {
-          const item = document.createElement('div');
-          item.className = 'cmdk-item' + (idx === activeIndex ? ' active' : '');
-          item.innerHTML = `<span>${cmd.label}</span><span class="cmdk-hint">${cmd.hint}</span>`;
-          item.addEventListener('click', () => { cmd.action(); closePalette(); });
-          cmdkList.appendChild(item);
+    // ---- Project Filters ----
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.proj-card').forEach(card => {
+          const cat = card.getAttribute('data-category');
+          if (filter === 'all' || cat === filter) card.style.display = 'flex';
+          else card.style.display = 'none';
         });
-      }
-
-      function openPalette() {
-        cmdkOverlay.classList.add('open');
-        cmdkInput.value = '';
-        filtered = paletteCommands.slice();
-        activeIndex = 0;
-        renderList();
-        setTimeout(() => cmdkInput.focus(), 30);
-      }
-
-      function closePalette() {
-        cmdkOverlay.classList.remove('open');
-      }
-
-      if (cmdkTrigger) cmdkTrigger.addEventListener('click', openPalette);
-
-      window.addEventListener('keydown', (e) => {
-        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-          e.preventDefault();
-          if (cmdkOverlay.classList.contains('open')) closePalette();
-          else openPalette();
-        }
-        if (e.key === 'Escape') closePalette();
       });
-
-      cmdkOverlay.addEventListener('click', (e) => {
-        if (e.target === cmdkOverlay) closePalette();
-      });
-
-      cmdkInput.addEventListener('input', () => {
-        const q = cmdkInput.value.toLowerCase();
-        filtered = paletteCommands.filter(c => c.label.toLowerCase().includes(q));
-        activeIndex = 0;
-        renderList();
-      });
-
-      cmdkInput.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
-          renderList();
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          activeIndex = Math.max(activeIndex - 1, 0);
-          renderList();
-        } else if (e.key === 'Enter') {
-          if (filtered[activeIndex]) {
-            filtered[activeIndex].action();
-            closePalette();
-          }
-        }
-      });
-    }
+    });
 
     initVisitCounter();
     initContactForm();
 
   } catch (err) {
     console.error('NBRZM script error:', err);
-    const pl = document.getElementById('preloader');
-    if (pl) { pl.classList.add('hide'); document.body.style.overflow = ''; }
   }
 });
 
-function runQuickCmd(cmd) {
-  const input = document.getElementById('cliInput');
-  if (input) {
-    input.value = cmd;
-    const event = new KeyboardEvent('keydown', { key: 'Enter', keyCode: 13 });
-    input.dispatchEvent(event);
-  }
+// Quick Copy
+function copyContact(text, btnEl) {
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = btnEl.innerText;
+    btnEl.innerText = '✅ Copied!';
+    setTimeout(() => { btnEl.innerText = originalText; }, 2000);
+  });
 }
 
-// BGM ENGINE
+// BGM Player
 const playlist = [
   { title: "Cyber Ambient", url: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3" },
   { title: "Lofi Chill", url: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" }
 ];
-
 let currentTrackIndex = 0;
 let isPlaying = false;
 const bgmAudio = new Audio();
@@ -538,9 +360,8 @@ bgmAudio.volume = 0.3;
 function updateBgmUI() {
   const bgmBtn = document.getElementById('bgmTitle');
   if (!bgmBtn) return;
-
   if (isPlaying) {
-    bgmBtn.innerHTML = `📊 ON: ${playlist[currentTrackIndex].title}`;
+    bgmBtn.innerHTML = `<div class="eq-bar"><span></span><span></span><span></span></div> ON: ${playlist[currentTrackIndex].title}`;
   } else {
     bgmBtn.innerHTML = `🎵 BGM: OFF`;
   }
@@ -567,7 +388,7 @@ function toggleBgm() {
   }
 }
 
-// GLOBAL VISIT COUNTER (PROXIED & RESPONSIVE)
+// Visit counter
 function initVisitCounter() {
   const digitsContainer = document.getElementById('viewDigits');
   if (!digitsContainer) return;
@@ -580,26 +401,22 @@ function initVisitCounter() {
       .join('');
   };
 
-  // Mengambil data hit dari provider CounterAPI
   fetch("https://api.counterapi.dev/v1/nbrzm-kinn-portfolio/page-views/up")
     .then(res => res.json())
     .then(data => {
       if (data && data.count) {
         renderDigits(data.count);
         localStorage.setItem('nbrzm_views_backup', data.count);
-      } else {
-        throw new Error('No count');
-      }
+      } else throw new Error('No count');
     })
     .catch(() => {
-      // Fallback lokal jika API publik terblokir/spam-filtered
       let count = parseInt(localStorage.getItem('nbrzm_views_backup') || '14', 10) + 1;
       localStorage.setItem('nbrzm_views_backup', count);
       renderDigits(count);
     });
 }
 
-// DIRECT CONTACT FORM (WEB3FORMS)
+// Contact form
 function initContactForm() {
   const contactForm = document.getElementById('contactForm');
   const formStatus = document.getElementById('formStatus');
@@ -608,14 +425,8 @@ function initContactForm() {
   if (contactForm) {
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      if (btnSubmit) {
-        btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Mengirim...';
-      }
-      if (formStatus) {
-        formStatus.className = 'form-status';
-        formStatus.innerText = '';
-      }
+      if (btnSubmit) { btnSubmit.disabled = true; btnSubmit.innerText = 'Mengirim...'; }
+      if (formStatus) { formStatus.className = 'form-status'; formStatus.innerText = ''; }
 
       const formData = new FormData(contactForm);
       const object = Object.fromEntries(formData);
@@ -623,81 +434,41 @@ function initContactForm() {
 
       fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: json
       })
       .then(async (response) => {
         let resJson = await response.json();
         if (response.status === 200) {
-          if (formStatus) {
-            formStatus.classList.add('success');
-            formStatus.innerText = '✅ Pesan berhasil terkirim!';
-          }
+          if (formStatus) { formStatus.classList.add('success'); formStatus.innerText = '✅ Pesan berhasil terkirim!'; }
           contactForm.reset();
         } else {
-          if (formStatus) {
-            formStatus.classList.add('error');
-            formStatus.innerText = resJson.message || 'Gagal mengirim pesan.';
-          }
+          if (formStatus) { formStatus.classList.add('error'); formStatus.innerText = resJson.message || 'Gagal mengirim pesan.'; }
         }
       })
       .catch(() => {
-        if (formStatus) {
-          formStatus.classList.add('error');
-          formStatus.innerText = 'Terjadi kesalahan jaringan.';
-        }
+        if (formStatus) { formStatus.classList.add('error'); formStatus.innerText = 'Terjadi kesalahan jaringan.'; }
       })
       .then(() => {
-        if (btnSubmit) {
-          btnSubmit.disabled = false;
-          btnSubmit.innerText = '✉️ Kirim Pesan';
-        }
+        if (btnSubmit) { btnSubmit.disabled = false; btnSubmit.innerText = '✉️ Kirim Pesan'; }
       });
     });
   }
 }
 
-// DATA ISI HALAMAN DETAIL (MODAL)
+// Modal
 const modalData = {
     about: {
         title: "🙋‍♂️ ABOUT ME",
-        content: `
-            <p>Halo! Saya adalah seorang siswa jurusan <b>Teknik Komputer & Jaringan (TKJ/TJKT)</b> yang berfokus pada pengembangan jaringan komputer, administrasi server, dan pemrograman web modern.</p>
-            <br>
-            <h4>⚡ SKILLS & KEAHLIAN</h4>
-            <ul>
-                <li><b>Computer Networking:</b> TCP/IP, Subnetting IPv4, Cisco Packet Tracer, Routing Static & Dynamic (RIP/OSPF), MikroTik.</li>
-                <li><b>Web Development:</b> HTML5, CSS3, JavaScript, PHP, Laravel Framework.</li>
-                <li><b>System Administration:</b> Linux/Debian Server Configuration, Web Server (Apache/Nginx), SSH, FTP.</li>
-            </ul>
-        `
+        content: `<p>Halo! Saya siswa <b>Teknik Komputer & Jaringan (TKJ/TJKT)</b> yang berfokus pada pengembangan jaringan komputer, administrasi server, dan pemrograman web modern.</p>`
     },
     dream: {
         title: "🚀 MY DREAM & GOALS",
-        content: `
-            <p>Cita-cita utama saya adalah berkembang menjadi seorang profesional IT terkemuka di bidang <b>Network Architecture & Cloud Engineering</b>.</p>
-            <br>
-            <h4>🎯 TARGET JANGKA PENDEK</h4>
-            <ul>
-                <li>Mendapatkan sertifikasi industri IT internasional (seperti CCNA atau MTCNA).</li>
-                <li>Menguasai arsitektur Full-Stack Web Development berbasis Laravel dan sistem RESTful API.</li>
-            </ul>
-        `
+        content: `<p>Target karir menjadi Network Engineer & Cloud Engineer profesional.</p>`
     },
     projects: {
         title: "💻 MY FEATURED PROJECTS",
-        content: `
-            <p>Berikut adalah beberapa projek utama yang telah saya kembangkan:</p>
-            <br>
-            <h4>1. Interactive Portfolio Web</h4>
-            <p>Website portofolio pribadi dilengkapi dengan fitur CLI terminal interaktif, widget ping real-time, dan pemutar musik BGM.</p>
-            <br>
-            <h4>2. Perancangan & Routing Jaringan Cisco</h4>
-            <p>Simulasi arsitektur jaringan multi-router menggunakan Cisco Packet Tracer dengan implementasi DHCP Server, OSPF Routing, dan VLAN Segmentation.</p>
-        `
+        content: `<p>Projek portofolio mencakup Web Application, Routing Cisco, dan Sistem Monitoring IoT.</p>`
     }
 };
 
@@ -705,7 +476,6 @@ function openModal(type) {
     const modal = document.getElementById('detailModal');
     const titleEl = document.getElementById('modalTitle');
     const bodyEl = document.getElementById('modalBody');
-
     if (modal && modalData[type]) {
         titleEl.innerHTML = modalData[type].title;
         bodyEl.innerHTML = modalData[type].content;
@@ -718,9 +488,7 @@ function closeModal() {
     if (modal) modal.classList.remove('active');
 }
 
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function(e) {
     const modal = document.getElementById('detailModal');
-    if (event.target === modal) {
-        closeModal();
-    }
+    if (e.target === modal) closeModal();
 });

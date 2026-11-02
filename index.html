@@ -63,9 +63,7 @@
   <!-- Hero Section -->
   <section class="hero" id="home">
     <div class="hero-content" data-reveal>
-      <div class="status-banner">
-        <span class="pulse-green"></span> Available for Freelance & Internship
-      </div>
+      <div class="eyebrow">TKJ Student / Network & IoT</div>
       <h1>Building <span class="hl">Networks</span>, Hardware & Web Solutions.</h1>
       <p class="lead" id="typedLead"></p>
 
@@ -77,13 +75,13 @@
       </div>
 
       <div class="btn-row">
-        <a href="#projects" class="btn primary glow-btn">Lihat Project ↓</a>
+        <a href="#projects" class="btn primary">Lihat Project ↓</a>
         <a href="#contact" class="btn alt">Hubungi Saya</a>
       </div>
     </div>
 
     <div class="hero-photo-wrap" data-reveal>
-      <div class="hero-photo glow-card">
+      <div class="hero-photo">
         <img src="./assets/nabil/profile.jpg" alt="Nabil Rozikin Maulana">
         <div class="status-pill"><span class="blink-dot"></span>STATUS: ONLINE</div>
       </div>
@@ -172,22 +170,17 @@
       <h2>Featured Works</h2>
     </div>
 
-    <!-- Filter Buttons -->
-    <div class="project-filter" data-reveal>
-      <button class="filter-btn active" data-filter="all">All Projects</button>
+    <!-- Filter Category Tabs -->
+    <div class="proj-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="web">Web Dev</button>
-      <button class="filter-btn" data-filter="network">Networking</button>
+      <button class="filter-btn" data-filter="net">Networking</button>
       <button class="filter-btn" data-filter="iot">IoT & Hardware</button>
     </div>
 
     <div class="proj-grid">
       <div class="proj-card" data-category="web" data-reveal>
-        <div class="proj-img">
-          <img src="./assets/images/portfolio.jpg" alt="Portfolio" onerror="this.style.display='none'">
-          <div class="proj-overlay">
-            <button class="btn-preview" onclick="openModal('about')">Preview Details ↗</button>
-          </div>
-        </div>
+        <div class="proj-img"><img src="./assets/images/portfolio.jpg" alt="Portfolio" onerror="this.style.display='none'"></div>
         <div class="proj-content">
           <div class="proj-tag">INFO / 01</div>
           <h3>🙋‍♂️ ABOUT ME</h3>
@@ -196,13 +189,8 @@
         </div>
       </div>
 
-      <div class="proj-card" data-category="network" data-reveal>
-        <div class="proj-img">
-          <img src="./assets/images/pathfinder.jpg" alt="Pathfinder" onerror="this.style.display='none'">
-          <div class="proj-overlay">
-            <button class="btn-preview" onclick="openModal('dream')">Preview Details ↗</button>
-          </div>
-        </div>
+      <div class="proj-card" data-category="net" data-reveal>
+        <div class="proj-img"><img src="./assets/images/pathfinder.jpg" alt="Pathfinder" onerror="this.style.display='none'"></div>
         <div class="proj-content">
           <div class="proj-tag">GOAL / 02</div>
           <h3>🚀 MY DREAM</h3>
@@ -212,12 +200,7 @@
       </div>
 
       <div class="proj-card" data-category="iot" data-reveal>
-        <div class="proj-img">
-          <img src="./assets/images/iot.jpg" alt="IoT Projects" onerror="this.style.display='none'">
-          <div class="proj-overlay">
-            <button class="btn-preview" onclick="openModal('projects')">Preview Details ↗</button>
-          </div>
-        </div>
+        <div class="proj-img"><img src="./assets/images/iot.jpg" alt="IoT Projects" onerror="this.style.display='none'"></div>
         <div class="proj-content">
           <div class="proj-tag">PORT / 03</div>
           <h3>💻 MY PROJECTS</h3>
@@ -261,7 +244,7 @@
       </div>
       <div class="cli-output" id="cliOutput"></div>
       <div class="cli-inputline">
-        <span class="cli-prompt">guest@nbrzm:~\$</span>
+        <span class="cli-prompt">guest@nbrzm:~$</span>
         <input type="text" id="cliInput" autocomplete="off" spellcheck="false">
       </div>
     </div>
@@ -357,22 +340,17 @@
           <textarea name="message" rows="4" placeholder="Tulis pesan Anda di sini..." required></textarea>
         </div>
 
-        <button type="submit" id="btnSubmitForm" class="btn primary glow-btn">✉️ Kirim Pesan</button>
+        <button type="submit" id="btnSubmitForm" class="btn primary">✉️ Kirim Pesan</button>
         <div id="formStatus" class="form-status"></div>
       </form>
 
-      <!-- Quick Copy Contact Links -->
-      <div class="contact-links" style="margin-top: 28px;">
+      <div class="contact-links" style="margin-top: 32px;">
         <a href="https://instagram.com/nblrzknm._" target="_blank">📷 Instagram</a>
         <a href="https://wa.me/6288210670848" target="_blank">💬 WhatsApp</a>
-        <button class="copy-btn" onclick="copyContact('nabilrozikin@gmail.com', 'Email Disalin!')">📋 Copy Email</button>
-        <button class="copy-btn" onclick="copyContact('+6288210670848', 'No. WA Disalin!')">📋 Copy WA</button>
+        <button class="btn-copy" onclick="copyContact('nabilrozikin@gmail.com', this)">📋 Copy Email</button>
       </div>
     </div>
   </section>
-
-  <!-- Toast Notification -->
-  <div id="toastNotif" class="toast-notif"></div>
 
   <!-- Footer & Floating Clock -->
   <footer>© 2026 Nabil Rozikin Maulana — Designed with Clean Modern Aesthetics</footer>
@@ -404,6 +382,8 @@
 
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "b25e222f1f124469b6c75e1f485f6277"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+
   <script>
     window.addEventListener('load', function () {
       setTimeout(function () {
