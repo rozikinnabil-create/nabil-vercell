@@ -645,6 +645,53 @@ function closeModal() {
     if (modal) modal.classList.remove('active');
 }
 
+// HANDLER KIRIM EMAIL LANGSUNG
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+const btnSubmit = document.getElementById('btnSubmitForm');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    btnSubmit.disabled = true;
+    btnSubmit.innerText = 'Mengirim...';
+    formStatus.className = 'form-status';
+    formStatus.innerText = '';
+
+    const formData = new FormData(contactForm);
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: json
+    })
+    .then(async (response) => {
+      let json = await response.json();
+      if (response.status == 200) {
+        formStatus.classList.add('success');
+        formStatus.innerText = '✅ Pesan berhasil terkirim!';
+        contactForm.reset();
+      } else {
+        formStatus.classList.add('error');
+        formStatus.innerText = json.message || 'Gagal mengirim pesan.';
+      }
+    })
+    .catch(() => {
+      formStatus.classList.add('error');
+      formStatus.innerText = 'Terjadi kesalahan jaringan.';
+    })
+    .then(() => {
+      btnSubmit.disabled = false;
+      btnSubmit.innerText = '✉️ Kirim Pesan';
+    });
+  });
+}
+
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('detailModal');
     if (event.target === modal) {

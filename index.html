@@ -236,7 +236,7 @@
       </div>
       <div class="cli-output" id="cliOutput"></div>
       <div class="cli-inputline">
-        <span class="cli-prompt">guest@nbrzm:~$</span>
+        <span class="cli-prompt">guest@nbrzm:~\$</span>
         <input type="text" id="cliInput" autocomplete="off" spellcheck="false">
       </div>
     </div>
@@ -315,12 +315,30 @@
   <section id="contact">
     <div class="contact-box" data-reveal>
       <h2>Let's Connect</h2>
-      <p>Saya terbuka untuk diskusi, kolaborasi, maupun peluang project. Hubungi saya melalui media sosial di bawah ini.</p>
-      <!-- SESUDAH -->
-      <div class="contact-links">
+      <p>Saya terbuka untuk diskusi, kolaborasi, maupun peluang project. Kirim pesan langsung di bawah ini.</p>
+      
+      <!-- Form Kirim Email Langsung -->
+      <form id="contactForm" class="contact-form">
+        <input type="hidden" name="access_key" value="f598fc7f-38eb-4a19-aca1-041d353ff4b4">
+        <input type="hidden" name="subject" value="Pesan Baru dari Portfolio Website">
+
+        <div class="form-group">
+          <input type="text" name="name" placeholder="Nama Anda" required>
+        </div>
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Email Anda" required>
+        </div>
+        <div class="form-group">
+          <textarea name="message" rows="4" placeholder="Tulis pesan Anda di sini..." required></textarea>
+        </div>
+
+        <button type="submit" id="btnSubmitForm" class="btn primary">✉️ Kirim Pesan</button>
+        <div id="formStatus" class="form-status"></div>
+      </form>
+
+      <div class="contact-links" style="margin-top: 32px;">
         <a href="https://instagram.com/nblrzknm._" target="_blank">📷 Instagram</a>
         <a href="https://wa.me/6288210670848" target="_blank">💬 WhatsApp</a>
-        <a href="mailto:nabilrozikinmaulana@gmail.com">✉️ Send Email</a>
       </div>
     </div>
   </section>
