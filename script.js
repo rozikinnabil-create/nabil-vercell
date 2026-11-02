@@ -64,17 +64,31 @@ document.addEventListener('DOMContentLoaded', () => {
       mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mnav.classList.remove('open')));
     }
 
-    // ---- Scroll reveal ----
+    // ---- Enhanced Scroll Reveal with Smooth Stagger ----
     const items = document.querySelectorAll('[data-reveal]');
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e, idx) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('in'), idx * 60);
-          io.unobserve(e.target);
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Memberikan jeda waktu antar elemen yang muncul bersamaan
+          const delay = entry.target.dataset.delay || 0;
+          setTimeout(() => {
+            entry.target.classList.add('in');
+          }, delay);
+          io.unobserve(entry.target);
         }
       });
-    }, { threshold: .15 });
-    items.forEach(i => io.observe(i));
+    }, { 
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    items.forEach((item, index) => {
+      // Otomatis memberi delay bertingkat untuk elemen yang sejajar
+      if (!item.dataset.delay) {
+        item.dataset.delay = (index % 3) * 120;
+      }
+      io.observe(item);
+    });
 
     // ---- Scroll progress bar ----
     const progressBar = document.getElementById('progressBar');
