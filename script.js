@@ -64,29 +64,31 @@ document.addEventListener('DOMContentLoaded', () => {
       mnav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mnav.classList.remove('open')));
     }
 
-    // ---- Enhanced Scroll Reveal with Smooth Stagger ----
+   // ---- Dynamic Spring-Staggered Scroll Reveal Engine ----
     const items = document.querySelectorAll('[data-reveal]');
+    
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Memberikan jeda waktu antar elemen yang muncul bersamaan
-          const delay = entry.target.dataset.delay || 0;
+          const target = entry.target;
+          
+          // Hitung index posisi elemen untuk efek domino otomatis
+          const siblingIndex = Array.from(target.parentNode.children).indexOf(target);
+          const customDelay = target.dataset.delay || (siblingIndex * 140);
+
           setTimeout(() => {
-            entry.target.classList.add('in');
-          }, delay);
-          io.unobserve(entry.target);
+            target.classList.add('in');
+          }, customDelay);
+
+          io.unobserve(target);
         }
       });
     }, { 
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.1,
+      rootMargin: '0px 0px -60px 0px' 
     });
 
-    items.forEach((item, index) => {
-      // Otomatis memberi delay bertingkat untuk elemen yang sejajar
-      if (!item.dataset.delay) {
-        item.dataset.delay = (index % 3) * 120;
-      }
+    items.forEach((item) => {
       io.observe(item);
     });
 
